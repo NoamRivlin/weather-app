@@ -1,3 +1,35 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Weather from "./pages/Weather";
+import Favorites from "./pages/Favorites";
+import React from "react";
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <React.Fragment>
+              <Weather />
+            </React.Fragment>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <React.Fragment>
+              <Favorites />
+            </React.Fragment>
+          }
+        />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;
+
 {
   /* {`${import.meta.env.VITE_REACT_API_KEY}`} */
 }
@@ -228,35 +260,3 @@ Current Conditions
 }
 */
 }
-
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Weather from "./pages/Weather";
-import Favorites from "./pages/Favorites";
-import React from "react";
-
-const App: React.FC = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <React.Fragment>
-              <Weather />
-            </React.Fragment>
-          }
-        />
-        <Route
-          path="/favorites"
-          element={
-            <React.Fragment>
-              <Favorites />
-            </React.Fragment>
-          }
-        />
-      </Routes>
-    </Router>
-  );
-};
-
-export default App;

@@ -1,5 +1,5 @@
 {
-  "homepage": "https://NoamRivlin.github.io/noam-rivlin-19-11-23",
+  "homepage": "http://NoamRivlin.github.io/noam-rivlin-19-11-23",
   "name": "weather-app-frontend",
   "private": true,
   "version": "0.0.0",
@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "predeploy": "yarn run build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
