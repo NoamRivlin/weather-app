@@ -1,7 +1,6 @@
-import React from "react";
 import Header from "../components/Header";
 
-function Favorites() {
+const Favorites: React.FC = () => {
   return (
     <>
       <Header>
@@ -9,6 +8,6 @@ function Favorites() {
       </Header>
     </>
   );
-}
+};
 
 export default Favorites;

@@ -1,7 +1,5 @@
-// Header.tsx
-
-import React, { ReactNode } from "react";
-import { Heading, Flex, Text } from "@chakra-ui/react";
+import { ReactNode } from "react";
+import { Flex, Heading } from "@chakra-ui/react";
 import Navigation from "./Navigation";
 
 interface HeaderProps {
@@ -16,13 +14,13 @@ const Header: React.FC<HeaderProps> = ({ children }) => {
         justify="space-between"
         padding={{ base: "0.5rem", md: "1rem" }}
       >
-        <Text
-          fontFamily="Your Font Name, sans-serif" // Replace with the actual font name
-          fontWeight="bold"
+        {/* //make heading into a link*/}
+        <Heading
+          //   fontFamily=" "
           fontSize="4xl"
         >
           Hello Weather
-        </Text>
+        </Heading>
 
         <Navigation />
       </Flex>

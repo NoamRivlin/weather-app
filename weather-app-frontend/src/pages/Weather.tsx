@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 
-function Weather() {
+const Weather: React.FC = () => {
   return (
     <>
       <Header>
@@ -8,6 +8,6 @@ function Weather() {
       </Header>
     </>
   );
-}
+};
 
 export default Weather;
