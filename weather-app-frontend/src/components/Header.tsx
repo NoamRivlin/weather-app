@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Flex, Heading } from "@chakra-ui/react";
-import Navigation from "./Navigation";
+import Navigation from "./Navbar";
 
 interface HeaderProps {
   children: ReactNode;
@@ -14,13 +14,7 @@ const Header: React.FC<HeaderProps> = ({ children }) => {
         justify="space-between"
         padding={{ base: "0.5rem", md: "1rem" }}
       >
-        {/* //make heading into a link*/}
-        <Heading
-          //   fontFamily=" "
-          fontSize="4xl"
-        >
-          Hello Weather
-        </Heading>
+        <Heading fontSize="4xl">Hello Weather</Heading>
 
         <Navigation />
       </Flex>
