@@ -3,7 +3,7 @@ import { Flex, Box, IconButton, useMediaQuery } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import NavButtons from "./NavButtons";
 
-const Navigation: React.FC = () => {
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
 
@@ -50,4 +50,4 @@ const Navigation: React.FC = () => {
   );
 };
 
-export default Navigation;
+export default Navbar;

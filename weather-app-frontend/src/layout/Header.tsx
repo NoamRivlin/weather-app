@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import { Flex, Heading } from "@chakra-ui/react";
-import Navigation from "./Navbar";
+import Navbar from "../components/navbar/Navbar";
 
-interface HeaderProps {
+interface RootLayoutHeaderProps {
   children: ReactNode;
 }
 
-const Header: React.FC<HeaderProps> = ({ children }) => {
+const RootLayoutHeader: React.FC<RootLayoutHeaderProps> = ({ children }) => {
   return (
     <>
       <Flex
@@ -16,11 +16,11 @@ const Header: React.FC<HeaderProps> = ({ children }) => {
       >
         <Heading fontSize="4xl">Hello Weather</Heading>
 
-        <Navigation />
+        <Navbar />
       </Flex>
       <Flex>{children}</Flex>
     </>
   );
 };
 
-export default Header;
+export default RootLayoutHeader;
