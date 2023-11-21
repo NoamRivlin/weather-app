@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from "../layout/Header";
 
 const FavoritesPage: React.FC = () => {
   return (

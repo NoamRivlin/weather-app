@@ -2,7 +2,7 @@ import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { Button, useColorMode } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
-import routes from "../routes";
+import routes from "../../routes";
 
 const NavButtons: React.FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
