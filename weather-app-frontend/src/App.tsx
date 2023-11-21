@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Weather from "./pages/Weather";
-import Favorites from "./pages/Favorites";
+import HomePage from "./pages/HomePage";
+import FavoritesPage from "./pages/FavoritesPage";
 import React from "react";
 
 const App: React.FC = () => {
@@ -11,7 +11,7 @@ const App: React.FC = () => {
           path="/"
           element={
             <React.Fragment>
-              <Weather />
+              <HomePage />
             </React.Fragment>
           }
         />
@@ -19,7 +19,7 @@ const App: React.FC = () => {
           path="/favorites"
           element={
             <React.Fragment>
-              <Favorites />
+              <FavoritesPage />
             </React.Fragment>
           }
         />
