@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 
-const Weather: React.FC = () => {
+const HomePage: React.FC = () => {
   return (
     <>
       <Header>
@@ -10,4 +10,4 @@ const Weather: React.FC = () => {
   );
 };
 
-export default Weather;
+export default HomePage;

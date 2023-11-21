@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Flex, Heading } from "@chakra-ui/react";
-import Navigation from "./Navbar";
+import Navbar from "./Navbar";
 
 interface HeaderProps {
   children: ReactNode;
@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ children }) => {
       >
         <Heading fontSize="4xl">Hello Weather</Heading>
 
-        <Navigation />
+        <Navbar />
       </Flex>
       <Flex>{children}</Flex>
     </>

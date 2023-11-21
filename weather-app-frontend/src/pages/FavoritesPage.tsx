@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 
-const Favorites: React.FC = () => {
+const FavoritesPage: React.FC = () => {
   return (
     <>
       <Header>
@@ -10,4 +10,4 @@ const Favorites: React.FC = () => {
   );
 };
 
-export default Favorites;
+export default FavoritesPage;
