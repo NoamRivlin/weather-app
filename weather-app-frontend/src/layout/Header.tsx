@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Flex, Heading } from "@chakra-ui/react";
 import Navbar from "../components/navbar/Navbar";
+import Search from "../components/Search";
 
 interface RootLayoutHeaderProps {
   children: ReactNode;
@@ -18,6 +19,8 @@ const RootLayoutHeader: React.FC<RootLayoutHeaderProps> = ({ children }) => {
 
         <Navbar />
       </Flex>
+      <Search />
+
       <Flex>{children}</Flex>
     </>
   );
