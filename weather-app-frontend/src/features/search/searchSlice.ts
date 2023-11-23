@@ -1,50 +1,58 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-
-// interface City {
-//   name: string;
-//   originCountry: string;
-//   key: string;
-// }
 const CLIENT_URI = import.meta.env.VITE_REACT_CLIENT_URI as string;
+
+interface City {
+  // name of the city
+  label: string;
+  // city key
+  value: string;
+}
 interface SearchState {
   loading: boolean;
   error: string | null;
-  // cities: City[] | null;
-  cities: object[] | null;
+  cities: City[] | null;
+  currentCity: City | null;
 }
 
 const initialState: SearchState = {
   loading: false,
   error: null,
   cities: null,
+  currentCity: { value: "215854", label: "Tel Aviv" },
 };
 
-export const getCity = createAsyncThunk<any, string, { rejectValue: string }>(
-  "search/getCity",
-  async (city, thunkAPI) => {
-    try {
-      const response = await axios.get(`${CLIENT_URI}/api/cities/${city}`);
-      console.log("response", response.data);
+export const getCity = createAsyncThunk<
+  City[],
+  string,
+  { rejectValue: string }
+>("search/getCity", async (city, thunkAPI) => {
+  try {
+    const response = await axios.get(`${CLIENT_URI}/api/cities/${city}`);
+    console.log("response", response.data);
 
-      return response.data;
-    } catch (error: any) {
-      if (error instanceof AxiosError) {
-        return thunkAPI.rejectWithValue(error.response?.data);
-      }
-      return thunkAPI.rejectWithValue(error.message);
+    return response.data;
+  } catch (error: any) {
+    if (error instanceof AxiosError) {
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
 const search = createSlice({
   name: "search",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentCity(state, action) {
+      state.currentCity = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCity.pending, (state) => {
       state.loading = true;
-      // state.cities = [{ label: "loading...", value: "loading..." }];
+      state.error = null;
+      state.cities = null;
     });
     builder.addCase(getCity.fulfilled, (state, action) => {
       state.loading = false;
@@ -59,4 +67,5 @@ const search = createSlice({
   },
 });
 
+export const { setCurrentCity } = search.actions;
 export default search.reducer;
