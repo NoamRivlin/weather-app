@@ -3,11 +3,10 @@ import { Request, Response } from "express";
 
 export const getCity = async (req: Request, res: Response) => {
   try {
-    const { city } = req.params;
-    console.log("city", city);
+    const { cityName } = req.params;
 
     const response = await axios.get(
-      `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.API_KEY}&q=${city}`
+      `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.API_KEY}&q=${cityName}`
     );
     console.log("response", response.data);
 

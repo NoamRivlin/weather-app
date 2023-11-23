@@ -3,6 +3,6 @@ import { getCity } from "../controllers/searchCityController";
 
 const router = Router();
 
-router.route("/:city").get(getCity);
+router.route("/:cityName").get(getCity);
 
 export default router;
