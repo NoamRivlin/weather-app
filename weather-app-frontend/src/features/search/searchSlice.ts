@@ -5,15 +5,16 @@ const API_KEY = import.meta.env.VITE_REACT_API_KEY;
 const API_URL = (query: string) =>
   `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${API_KEY}&q=${query}`;
 
-interface City {
-  name: string;
-  originCountry: string;
-  key: string;
-}
+// interface City {
+//   name: string;
+//   originCountry: string;
+//   key: string;
+// }
 interface SearchState {
   loading: boolean;
   error: string | null;
-  cities: City[] | null;
+  // cities: City[] | null;
+  cities: object[] | null;
 }
 
 const initialState: SearchState = {
@@ -26,7 +27,9 @@ export const getCity = createAsyncThunk<any, string, { rejectValue: string }>(
   "search/getCity",
   async (city, thunkAPI) => {
     try {
-      const response = await axios.get(API_URL(city));
+      const response = await axios.get(
+        `http://localhost:5000/api/cities/${city}`
+      );
       console.log("response", response.data);
 
       return response.data;
@@ -46,6 +49,7 @@ const search = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getCity.pending, (state) => {
       state.loading = true;
+      // state.cities = [{ label: "loading...", value: "loading..." }];
     });
     builder.addCase(getCity.fulfilled, (state, action) => {
       state.loading = false;
@@ -55,6 +59,7 @@ const search = createSlice({
     builder.addCase(getCity.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
+      state.cities = null;
     });
   },
 });

@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, FormControl } from "@chakra-ui/react";
 import {
   AsyncSelect,
   chakraComponents,
   LoadingIndicatorProps,
+  Select,
 } from "chakra-react-select";
+import { useDispatch } from "react-redux";
+import { getCity } from "../features/search/searchSlice";
+import { AppDispatch, RootState } from "../features/store";
+import { useSelector } from "react-redux";
+import { debounce } from "lodash";
 
 const asyncComponents = {
   LoadingIndicator: (props: LoadingIndicatorProps) => {
@@ -19,36 +25,46 @@ const asyncComponents = {
   },
 };
 
-const citiesArr = [
-  "New York",
-  "Los Angeles",
-  "Chicago",
-  "Houston",
-  "Phoenix",
-  "Philadelphia",
-  "San Antonio",
-  "San Diego",
-];
+const Search: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { cities, loading } = useSelector((state: RootState) => state.search);
 
-const Search: React.FC = () => (
-  <Container mb={5}>
-    <FormControl>
-      <AsyncSelect
-        name="City Search"
-        placeholder="Search Weather By City Name"
-        components={asyncComponents}
-        loadOptions={(inputValue, callback) => {
-          setTimeout(() => {
-            callback(
-              citiesArr
-                .filter((i) => i.includes(inputValue))
-                .map((i) => ({ label: i, value: i }))
-            );
-          }, 1000);
-        }}
-      />
-    </FormControl>
-  </Container>
-);
+  const debouncedDispatch = debounce((value: string) => {
+    dispatch(getCity(value));
+  }, 1000);
+
+  const onChangeHandler = (value: string) => {
+    if (value.length >= 3) {
+      debouncedDispatch(value);
+    }
+  };
+
+  return (
+    <Container mb={5}>
+      <FormControl>
+        {/* <AsyncSelect
+          name="City Search"
+          placeholder="Search Weather By City Name"
+          components={asyncComponents}
+          // loadOptions={loadOptions}
+        /> */}
+        <Select
+          name="colors"
+          options={cities || []}
+          isLoading
+          placeholder=" ..."
+          closeMenuOnSelect={true}
+          onChange={(value) => {
+            console.log("value", value);
+          }}
+          onInputChange={(value) => {
+            onChangeHandler(value);
+          }}
+          // value={}
+        />
+      </FormControl>
+    </Container>
+  );
+};
 
 export default Search;
