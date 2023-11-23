@@ -2,12 +2,7 @@
 import { Flex, Heading } from "@chakra-ui/react";
 import Navbar from "../components/navbar/Navbar";
 
-// interface RootLayoutHeaderProps {
-//   children: ReactNode;
-// }
-// <RootLayoutHeaderProps>
 const RootLayoutHeader: React.FC = () => {
-  //{ children }
   return (
     <>
       <Flex
@@ -19,8 +14,6 @@ const RootLayoutHeader: React.FC = () => {
 
         <Navbar />
       </Flex>
-
-      {/* <Flex>{children}</Flex> */}
     </>
   );
 };

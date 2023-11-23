@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
-const API_KEY = import.meta.env.VITE_REACT_API_KEY;
-const API_URL = (query: string) =>
-  `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${API_KEY}&q=${query}`;
-
 // interface City {
 //   name: string;
 //   originCountry: string;

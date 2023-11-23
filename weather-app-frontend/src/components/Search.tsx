@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, FormControl } from "@chakra-ui/react";
+import { Container, FormControl, useMediaQuery } from "@chakra-ui/react";
 import {
   AsyncSelect,
   chakraComponents,
@@ -12,22 +12,10 @@ import { AppDispatch, RootState } from "../features/store";
 import { useSelector } from "react-redux";
 import { debounce } from "lodash";
 
-const asyncComponents = {
-  LoadingIndicator: (props: LoadingIndicatorProps) => {
-    return (
-      <chakraComponents.LoadingIndicator
-        speed="1s"
-        spinnerSize="md"
-        thickness="3px"
-        {...props}
-      />
-    );
-  },
-};
-
 const Search: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { cities, loading } = useSelector((state: RootState) => state.search);
+  const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
 
   const debouncedDispatch = debounce((value: string) => {
     dispatch(getCity(value));
@@ -40,19 +28,14 @@ const Search: React.FC = () => {
   };
 
   return (
-    <Container mb={5}>
+    <Container mt={"130px"} width={isSmallerThan600px ? "300px" : "700px"}>
       <FormControl>
-        {/* <AsyncSelect
-          name="City Search"
-          placeholder="Search Weather By City Name"
-          components={asyncComponents}
-          // loadOptions={loadOptions}
-        /> */}
         <Select
+          size={isSmallerThan600px ? "sm" : "md"}
           name="colors"
           options={cities || []}
-          isLoading
-          placeholder=" ..."
+          isLoading={loading}
+          placeholder="Search Weather By City Name"
           closeMenuOnSelect={true}
           onChange={(value) => {
             console.log("value", value);
@@ -60,7 +43,6 @@ const Search: React.FC = () => {
           onInputChange={(value) => {
             onChangeHandler(value);
           }}
-          // value={}
         />
       </FormControl>
     </Container>
