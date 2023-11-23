@@ -3,9 +3,7 @@ import Header from "../layout/Header";
 const FavoritesPage: React.FC = () => {
   return (
     <>
-      <Header>
-        <div>Favorites</div>
-      </Header>
+      <Header />
     </>
   );
 };
