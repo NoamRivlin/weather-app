@@ -6,6 +6,7 @@ import axios, { AxiosError } from "axios";
 //   originCountry: string;
 //   key: string;
 // }
+const CLIENT_URI = import.meta.env.VITE_REACT_CLIENT_URI as string;
 interface SearchState {
   loading: boolean;
   error: string | null;
@@ -23,9 +24,7 @@ export const getCity = createAsyncThunk<any, string, { rejectValue: string }>(
   "search/getCity",
   async (city, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/cities/${city}`
-      );
+      const response = await axios.get(`${CLIENT_URI}/api/cities/${city}`);
       console.log("response", response.data);
 
       return response.data;
