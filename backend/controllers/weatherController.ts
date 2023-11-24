@@ -31,7 +31,7 @@ export const currentWeather = async (req: Request, res: Response) => {
   }
 };
 
-export const fiveDailyWeather = async (req: Request, res: Response) => {
+export const fiveDailyForecast = async (req: Request, res: Response) => {
   try {
     const { cityKey } = req.params;
 
@@ -39,9 +39,9 @@ export const fiveDailyWeather = async (req: Request, res: Response) => {
       `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=${API_KEY}`
     );
 
-    const fiveDailyWeather = response.data.DailyForecasts;
-    const leanFiveDailyWeather = fiveDailyWeather.map((day: any) => ({
-      date: day.Date,
+    const fiveDailyforecast = response.data.DailyForecasts;
+    const leanFiveDailyforecast = fiveDailyforecast.map((day: any) => ({
+      date: formatDate(day.Date),
       minTempMetric: day.Temperature.Minimum.Value,
       maxTempMetric: day.Temperature.Maximum.Value,
       minTempImperial: celciusToFahrenheit(day.Temperature.Minimum.Value),
@@ -49,7 +49,7 @@ export const fiveDailyWeather = async (req: Request, res: Response) => {
       dayPhrase: day.Day.IconPhrase,
       nightPhrase: day.Night.IconPhrase,
     }));
-    res.status(200).json(leanFiveDailyWeather);
+    res.status(200).json(leanFiveDailyforecast);
   } catch (error: any) {
     console.log("error", error);
     res
@@ -61,3 +61,13 @@ export const fiveDailyWeather = async (req: Request, res: Response) => {
 };
 
 const celciusToFahrenheit = (celcius: number) => (celcius * 9) / 5 + 32;
+
+function formatDate(inputDate: string) {
+  const date = new Date(inputDate);
+
+  // Get day and month with leading zeros
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+
+  return `${day}.${month}`;
+}

@@ -26,10 +26,10 @@ export const getCity = createAsyncThunk<
   City[],
   string,
   { rejectValue: string }
->("search/getCity", async (city, thunkAPI) => {
+>("search/getCity", async (cityName, thunkAPI) => {
   try {
-    const response = await axios.get(`${CLIENT_URI}/api/cities/${city}`);
-    console.log("response", response.data);
+    const response = await axios.get(`${CLIENT_URI}/api/cities/${cityName}`);
+    // console.log("response", response.data);
 
     return response.data;
   } catch (error: any) {

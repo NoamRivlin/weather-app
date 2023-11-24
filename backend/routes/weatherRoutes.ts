@@ -1,12 +1,12 @@
 import { Router } from "express";
 import {
   currentWeather,
-  fiveDailyWeather,
+  fiveDailyForecast,
 } from "../controllers/weatherController";
 
 const router = Router();
 
 router.route("/:cityKey").get(currentWeather);
-router.route("/fiveDaily/:cityKey").get(fiveDailyWeather);
+router.route("/fiveDaily/:cityKey").get(fiveDailyForecast);
 
 export default router;
