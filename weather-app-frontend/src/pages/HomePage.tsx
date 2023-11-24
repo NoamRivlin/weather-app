@@ -1,4 +1,5 @@
 import Search from "../components/Search";
+import Forecast from "../components/forecast/Forecast";
 import Header from "../layout/Header";
 
 const HomePage: React.FC = () => {
@@ -11,6 +12,7 @@ const HomePage: React.FC = () => {
        if mobile: a slider of weather cards
         if desktop: a grid of weather cards
       */}
+      <Forecast />
     </>
   );
 };

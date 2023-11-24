@@ -10,7 +10,12 @@ const RootLayoutHeader: React.FC = () => {
         justify="space-between"
         padding={{ base: "0.5rem", md: "1rem" }}
       >
-        <Heading fontSize="4xl">Hello Weather</Heading>
+        <Heading fontSize="4xl">Weather App </Heading>
+        {/* <img
+          src={"../../public/icons/gifIcon.gif"}
+          alt="Weather GIF"
+          style={{ width: "100px", height: "100px" }}
+        /> */}
 
         <Navbar />
       </Flex>
