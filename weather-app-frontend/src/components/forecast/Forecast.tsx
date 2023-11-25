@@ -2,8 +2,17 @@ import React from "react";
 import { AppDispatch, RootState } from "../../features/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { useMediaQuery, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  Text,
+  useMediaQuery,
+  useToast,
+} from "@chakra-ui/react";
 import { getFiveDaysForecast } from "../../features/weather/weatherSlice";
+import ForecastCard from "./ForecastCard";
+import { wrap } from "lodash";
 
 const Forecast: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,6 +49,14 @@ const Forecast: React.FC = () => {
   return (
     <>
       <h1>Forecast</h1>
+      <Flex p={8} flexWrap={"wrap"} gap={5}>
+        {/* <Grid templateColumns="repeat(5, 1fr)" gap={3} p={8} flexWrap={ true}> */}
+        {fiveDaysForecast &&
+          fiveDaysForecast.map((dialyForecast) => (
+            <ForecastCard {...dialyForecast} key={dialyForecast.date} />
+          ))}
+        {/* </Grid> */}
+      </Flex>
     </>
   );
 };

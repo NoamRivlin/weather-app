@@ -49,7 +49,7 @@ const Search: React.FC = () => {
   };
 
   return (
-    <Container mt={"130px"} width={isSmallerThan600px ? "300px" : "700px"}>
+    <Container mt={"20px"} width={isSmallerThan600px ? "300px" : "700px"}>
       <FormLabel> Enter City Name</FormLabel>
       <FormControl>
         <Select
