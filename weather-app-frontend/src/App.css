@@ -46,3 +46,8 @@
   margin: 0px;
   box-sizing: border-box;
 } */
+
+body,
+html {
+  overflow-x: hidden;
+}

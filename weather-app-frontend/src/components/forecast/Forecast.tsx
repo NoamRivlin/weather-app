@@ -13,6 +13,7 @@ import {
 import { getFiveDaysForecast } from "../../features/weather/weatherSlice";
 import ForecastCard from "./ForecastCard";
 import { wrap } from "lodash";
+import ForecastCardV2 from "./forecastCardV2";
 
 const Forecast: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -65,15 +66,17 @@ const Forecast: React.FC = () => {
       > */}
       <Flex
         mt={14}
-        justify="center"
-        alignSelf={isAbove1100px ? " " : "center"}
+        justify="start"
+        // alignSelf={isAbove1100px ? " " : "center"}
         // justifyContent="space-around"
-        gap={isAbove1100px ? "100px" : 7}
-        flexDir={isAbove1100px ? "row" : "column"}
+        // gap={isAbove1100px ? "20px" : 7}
+        // flexDir={isAbove1100px ? "row" : "column"}
+        overflowX={"scroll"}
       >
         {fiveDaysForecast &&
           fiveDaysForecast.map((dailyForecast) => (
-            <ForecastCard {...dailyForecast} key={dailyForecast.date} />
+            // <ForecastCard {...dailyForecast} key={dailyForecast.date} />
+            <ForecastCardV2 {...dailyForecast} key={dailyForecast.date} />
           ))}
       </Flex>
       {/* </Grid> */}
