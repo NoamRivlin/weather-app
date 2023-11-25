@@ -5,25 +5,22 @@ import {
   Flex,
   Container,
   VStack,
-  HStack,
   useColorMode,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
-import { FiveDaysForecast } from "../../features/weather/weatherSlice";
+import { FavoriteCitiesCurrentWeather } from "../../features/weather/weatherSlice";
 
-const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
+const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
   const [bgGif, setBGGif] = useState<string | undefined>(undefined);
   const { tempMetric } = useSelector((state: RootState) => state.weather);
   const { colorMode } = useColorMode();
 
   const {
-    date,
-    minTempMetric,
-    minTempImperial,
-    maxTempImperial,
-    maxTempMetric,
-    dayPhrase,
+    temperatureMetric,
+    temperatureImperial,
+    weatherText: dayPhrase,
+    cityName,
   } = props;
 
   const commonTextStyle = {
@@ -78,24 +75,16 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
           <Box p={4} border={0}>
             <VStack spacing="3">
               <Text fontSize="2xl" color="white">
-                {date}
+                {cityName}
               </Text>
               <Text fontSize={"2xl"} {...commonTextStyle}>
                 {dayPhrase}
               </Text>
               <Text fontSize="5xl" color="white">
-                {`${tempMetric ? maxTempMetric : maxTempImperial}°${
+                {`${tempMetric ? temperatureMetric : temperatureImperial}°${
                   tempMetric ? "C" : "F"
                 }`}
               </Text>
-              <HStack>
-                <Text fontSize={"xl"} {...commonTextStyle}>
-                  Night:{" "}
-                  {`${tempMetric ? minTempMetric : minTempImperial}°${
-                    tempMetric ? "C" : "F"
-                  }`}
-                </Text>
-              </HStack>
             </VStack>
           </Box>
         </Box>
@@ -104,4 +93,4 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
   );
 };
 
-export default ForecastCard;
+export default FavoriteCard;

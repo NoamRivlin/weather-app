@@ -2,16 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 const CLIENT_URI = import.meta.env.VITE_REACT_CLIENT_URI as string;
 
-// this is for favorites,
-// each favored city will hold the current weather
-interface CurrWeather {
+export interface FavoriteCitiesCurrentWeather {
   isDayTime: boolean;
   temperatureMetric: number;
   temperatureImperial: number;
   weatherText: string;
+  cityName: string;
 }
 
-// this is for search results,
 export interface FiveDaysForecast {
   date: string;
   minTempMetric: number;
@@ -25,29 +23,28 @@ export interface FiveDaysForecast {
 interface WeatherState {
   loading: boolean;
   error: string | null;
-  currWeather: CurrWeather | null;
+  FavoriteCitiesCurrentWeather: FavoriteCitiesCurrentWeather[] | [];
   tempMetric: boolean;
-  fiveDaysForecast: FiveDaysForecast[] | null;
+  fiveDaysForecast: FiveDaysForecast[] | [];
 }
 
 const initialState: WeatherState = {
   loading: false,
   error: null,
   tempMetric: true,
-  currWeather: null,
-  fiveDaysForecast: null,
+  FavoriteCitiesCurrentWeather: [],
+  fiveDaysForecast: [],
 };
 
 export const getCurrentWeather = createAsyncThunk<
-  CurrWeather,
-  string,
+  FavoriteCitiesCurrentWeather,
+  { cityKey: string; cityName: string },
   { rejectValue: string }
->("weather/getCurrentWeather", async (cityKey, thunkAPI) => {
+>("weather/getCurrentWeather", async ({ cityKey, cityName }, thunkAPI) => {
   try {
     const response = await axios.get(`${CLIENT_URI}/api/weather/${cityKey}`);
-    console.log("response", response.data);
 
-    return response.data;
+    return { ...response.data, cityName };
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -62,13 +59,12 @@ export const getFiveDaysForecast = createAsyncThunk<
   { rejectValue: string }
 >("forecast/getFiveDaysforecast", async (cityKey, thunkAPI) => {
   try {
-    // const response = await axios.get(
-    //   `${CLIENT_URI}/api/weather/fiveDaily/${cityKey}`
-    // );
-    // console.log("response", response.data);
+    const response = await axios.get(
+      `${CLIENT_URI}/api/weather/fiveDaily/${cityKey}`
+    );
 
-    // return response.data;
-    return mockWeather;
+    return response.data;
+    // return mockWeather;
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -89,23 +85,28 @@ const weather = createSlice({
     builder.addCase(getCurrentWeather.pending, (state) => {
       state.loading = true;
       state.error = null;
-      state.currWeather = null;
+      state.FavoriteCitiesCurrentWeather = [];
     });
     builder.addCase(getCurrentWeather.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
-      state.currWeather = action.payload;
+      state.FavoriteCitiesCurrentWeather =
+        state.FavoriteCitiesCurrentWeather.some(
+          (city) => city.cityName === action.payload.cityName
+        )
+          ? state.FavoriteCitiesCurrentWeather
+          : [...state.FavoriteCitiesCurrentWeather, action.payload];
     });
     builder.addCase(getCurrentWeather.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
-      state.currWeather = null;
+      state.FavoriteCitiesCurrentWeather = [];
     });
 
     builder.addCase(getFiveDaysForecast.pending, (state) => {
       state.loading = true;
       state.error = null;
-      state.fiveDaysForecast = null;
+      state.fiveDaysForecast = [];
     });
     builder.addCase(getFiveDaysForecast.fulfilled, (state, action) => {
       state.loading = false;
@@ -115,7 +116,7 @@ const weather = createSlice({
     builder.addCase(getFiveDaysForecast.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
-      state.fiveDaysForecast = null;
+      state.fiveDaysForecast = [];
     });
   },
 });

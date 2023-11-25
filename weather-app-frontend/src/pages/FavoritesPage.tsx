@@ -1,15 +1,14 @@
+import { Flex } from "@chakra-ui/layout";
 import Header from "../layout/Header";
+import Favorites from "../components/forecast/Favorites";
 
 const FavoritesPage: React.FC = () => {
-  // add background gif of a spinning earth
   return (
     <>
-      <Header />
-      {/* 
-      a list of favorite cities
-      each city is a weather card
-      
-      */}
+      <Flex flexDir={"column"}>
+        <Header />
+        <Favorites />
+      </Flex>
     </>
   );
 };

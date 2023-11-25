@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 const CLIENT_URI = import.meta.env.VITE_REACT_CLIENT_URI as string;
 
-interface City {
+export interface City {
   // name of the city
   label: string;
   // city key
@@ -49,7 +49,13 @@ const search = createSlice({
       state.currentCity = action.payload;
     },
     updateFavoriteCities(state, action) {
-      state.favoriteCities = action.payload;
+      const newFavoriteCities = action.payload;
+      if (newFavoriteCities) {
+        // Remove duplicates by converting the array to a Set and back to an array
+        state.favoriteCities = Array.from(new Set(newFavoriteCities));
+      } else {
+        state.favoriteCities = null;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -71,5 +77,5 @@ const search = createSlice({
   },
 });
 
-export const { setCurrentCity } = search.actions;
+export const { setCurrentCity, updateFavoriteCities } = search.actions;
 export default search.reducer;
