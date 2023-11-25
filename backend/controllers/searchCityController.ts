@@ -8,7 +8,6 @@ export const getCity = async (req: Request, res: Response) => {
     const response = await axios.get(
       `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.API_KEY}&q=${cityName}`
     );
-    console.log("response", response.data);
 
     const cities = response.data.map((city: any) => ({
       label: city.LocalizedName,

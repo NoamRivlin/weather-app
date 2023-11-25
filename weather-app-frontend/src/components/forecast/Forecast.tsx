@@ -44,7 +44,7 @@ const Forecast: React.FC = () => {
         flexDir={isLessThan700px ? "column" : "row"}
         alignSelf={isLessThan700px ? "center " : ""}
         gap={isLessThan700px ? "30px" : "10px"}
-        overflowX={"scroll"}
+        overflowX={"auto"}
       >
         {fiveDaysForecast &&
           fiveDaysForecast.map((dailyForecast) => (

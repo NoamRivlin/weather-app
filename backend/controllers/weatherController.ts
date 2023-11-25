@@ -16,8 +16,10 @@ export const currentWeather = async (req: Request, res: Response) => {
     const currentWeather = response.data[0];
     const leanCurrentWeather = {
       isDayTime: currentWeather.IsDayTime,
-      temperatureMetric: currentWeather.Temperature.Metric.Value,
-      temperatureImperial: currentWeather.Temperature.Imperial.Value,
+      temperatureMetric: Math.round(currentWeather.Temperature.Metric.Value),
+      temperatureImperial: Math.round(
+        currentWeather.Temperature.Imperial.Value
+      ),
       weatherText: currentWeather.WeatherText,
     };
     res.status(200).json(leanCurrentWeather);

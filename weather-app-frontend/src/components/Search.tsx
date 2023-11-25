@@ -1,17 +1,25 @@
 import React from "react";
 import {
+  Button,
   Container,
+  Flex,
   FormControl,
   FormLabel,
+  Tooltip,
   useMediaQuery,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { useDispatch } from "react-redux";
-import { getCity, setCurrentCity } from "../features/search/searchSlice";
+import {
+  getCity,
+  setCurrentCity,
+  updateFavoriteCities,
+} from "../features/search/searchSlice";
 import { AppDispatch, RootState } from "../features/store";
 import { useSelector } from "react-redux";
 import { debounce } from "lodash";
+import { AddIcon, StarIcon } from "@chakra-ui/icons";
 
 const Search: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,6 +28,7 @@ const Search: React.FC = () => {
     loading: searchLoading,
     currentCity,
     error,
+    favoriteCities,
   } = useSelector((state: RootState) => state.search);
 
   const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
@@ -48,25 +57,84 @@ const Search: React.FC = () => {
     }
   };
 
+  const onUpdateFavoriteCitiesHandler = () => {
+    if (currentCity) {
+      if (
+        favoriteCities?.some(
+          (favoriteCity) => favoriteCity.value === currentCity.value
+        )
+      ) {
+        // City is already in favorites, remove it
+        const updatedFavorites = favoriteCities.filter(
+          (favoriteCity) => favoriteCity.value !== currentCity.value
+        );
+        dispatch(updateFavoriteCities(updatedFavorites));
+      } else {
+        // City is not in favorites, add it
+        dispatch(
+          updateFavoriteCities([...(favoriteCities ?? []), currentCity])
+        );
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if (!favoriteCities) {
+      const favoriteCitiesFromLocalStorage =
+        localStorage.getItem("favoriteCities");
+      if (favoriteCitiesFromLocalStorage) {
+        dispatch(
+          updateFavoriteCities(JSON.parse(favoriteCitiesFromLocalStorage))
+        );
+      }
+    }
+    if (favoriteCities) {
+      localStorage.setItem("favoriteCities", JSON.stringify(favoriteCities));
+    }
+  }, [favoriteCities]);
+
   return (
     <Container mt={"20px"} width={isSmallerThan600px ? "300px" : "700px"}>
       <FormLabel> Enter City Name</FormLabel>
-      <FormControl>
-        <Select
-          size={isSmallerThan600px ? "sm" : "md"}
-          name="colors"
-          options={cities || []}
-          isLoading={searchLoading}
-          closeMenuOnSelect={true}
-          onChange={(value) => {
-            dispatch(setCurrentCity(value));
-          }}
-          onInputChange={(value) => {
-            onChangeHandler(value);
-          }}
-          value={currentCity}
-        />
-      </FormControl>
+      <Flex alignItems={"center"}>
+        <FormControl>
+          <Select
+            size={isSmallerThan600px ? "sm" : "md"}
+            name="colors"
+            options={cities || []}
+            isLoading={searchLoading}
+            closeMenuOnSelect={true}
+            onChange={(value) => {
+              dispatch(setCurrentCity(value));
+            }}
+            onInputChange={(value) => {
+              onChangeHandler(value);
+            }}
+            value={currentCity}
+          />
+        </FormControl>
+        {currentCity && (
+          <Tooltip
+            label={
+              favoriteCities?.some(
+                (favoriteCity) => favoriteCity.value === currentCity.value
+              )
+                ? "Remove from Favorites"
+                : "Add to Favorites"
+            }
+          >
+            <Button p={0} ml={10} onClick={onUpdateFavoriteCitiesHandler}>
+              {favoriteCities?.some(
+                (favoriteCity) => favoriteCity.value === currentCity.value
+              ) ? (
+                <StarIcon color="yellow.500" />
+              ) : (
+                <AddIcon color="green.500" />
+              )}
+            </Button>
+          </Tooltip>
+        )}
+      </Flex>
     </Container>
   );
 };
