@@ -2,26 +2,15 @@ import React from "react";
 import { AppDispatch, RootState } from "../../features/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {
-  Box,
-  Flex,
-  Grid,
-  Text,
-  useMediaQuery,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, useMediaQuery, useToast } from "@chakra-ui/react";
 import { getFiveDaysForecast } from "../../features/weather/weatherSlice";
 import ForecastCard from "./ForecastCard";
-import { wrap } from "lodash";
-import ForecastCardV2 from "./forecastCardV2";
 
 const Forecast: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    fiveDaysForecast,
-    loading: forecastLoading,
-    error,
-  } = useSelector((state: RootState) => state.weather);
+  const { fiveDaysForecast, error } = useSelector(
+    (state: RootState) => state.weather
+  );
 
   const { currentCity } = useSelector((state: RootState) => state.search);
 
@@ -31,10 +20,7 @@ const Forecast: React.FC = () => {
     }
   }, [currentCity, dispatch]);
 
-  const [isAbove1100px, isAbove600px] = useMediaQuery([
-    "(min-width: 1100px)",
-    "(min-width: 600px)",
-  ]);
+  const [isLessThan700px] = useMediaQuery("(max-width: 700px)");
 
   const toast = useToast();
   React.useEffect(() => {
@@ -52,34 +38,19 @@ const Forecast: React.FC = () => {
 
   return (
     <>
-      {/* <Grid
-        mt="10"
-        templateColumns={
-          isAbove1100px
-            ? "repeat(5, 1fr)"
-            : // : isAbove600px
-              // ? "repeat(2, 1fr)"
-              "repeat(1, 1fr)"
-        }
-        // gap={2}
-        justifyItems="center" // Center the items horizontally
-      > */}
       <Flex
         mt={14}
-        justify="start"
-        // alignSelf={isAbove1100px ? " " : "center"}
-        // justifyContent="space-around"
-        // gap={isAbove1100px ? "20px" : 7}
-        // flexDir={isAbove1100px ? "row" : "column"}
+        justifyContent={isLessThan700px ? "center" : "start"}
+        flexDir={isLessThan700px ? "column" : "row"}
+        alignSelf={isLessThan700px ? "center " : ""}
+        gap={isLessThan700px ? "30px" : "10px"}
         overflowX={"scroll"}
       >
         {fiveDaysForecast &&
           fiveDaysForecast.map((dailyForecast) => (
-            // <ForecastCard {...dailyForecast} key={dailyForecast.date} />
-            <ForecastCardV2 {...dailyForecast} key={dailyForecast.date} />
+            <ForecastCard {...dailyForecast} key={dailyForecast.date} />
           ))}
       </Flex>
-      {/* </Grid> */}
     </>
   );
 };

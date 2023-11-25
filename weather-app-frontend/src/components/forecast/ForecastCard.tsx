@@ -1,16 +1,22 @@
-import React from "react";
-import { AppDispatch, RootState } from "../../features/store";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
-  FiveDaysForecast,
-  getFiveDaysForecast,
-} from "../../features/weather/weatherSlice";
+  Box,
+  Text,
+  Flex,
+  Container,
+  VStack,
+  HStack,
+  useColorMode,
+  useMediaQuery,
+} from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../features/store";
+import { FiveDaysForecast } from "../../features/weather/weatherSlice";
 
-const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
-  const dispatch = useDispatch<AppDispatch>();
+const ForecastCardV2: React.FC<FiveDaysForecast> = ({ ...props }) => {
+  const [bgGif, setBGGif] = useState<string | undefined>(undefined);
   const { tempMetric } = useSelector((state: RootState) => state.weather);
+  const { colorMode } = useColorMode();
 
   const {
     date,
@@ -19,51 +25,96 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
     maxTempImperial,
     maxTempMetric,
     dayPhrase,
-    nightPhrase,
   } = props;
 
-  const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
+  const commonTextStyle = {
+    color: colorMode === "light" ? "white" : "white",
+    backgroundColor: "black",
+    p: "12px",
+    borderRadius: "12px",
+    opacity: "0.7",
+    boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.5)",
+  };
+
+  useEffect(() => {
+    if (dayPhrase?.toLowerCase().includes("snow")) {
+      setBGGif("url('https://mdbgo.io/ascensus/mdb-advanced/img/snow.gif')");
+    }
+    if (dayPhrase?.toLowerCase().includes("cloud")) {
+      setBGGif("url('https://mdbgo.io/ascensus/mdb-advanced/img/clouds.gif')");
+    }
+    if (dayPhrase?.toLowerCase().includes("fog")) {
+      setBGGif("url('https://mdbgo.io/ascensus/mdb-advanced/img/fog.gif')");
+    }
+    if (
+      dayPhrase?.toLowerCase().includes("rain") ||
+      dayPhrase?.toLowerCase().includes("shower")
+    ) {
+      setBGGif("url('https://mdbgo.io/ascensus/mdb-advanced/img/rain.gif')");
+    }
+    if (dayPhrase?.toLowerCase().includes("sunny")) {
+      setBGGif("url('https://mdbgo.io/ascensus/mdb-advanced/img/clear.gif')");
+    }
+    if (dayPhrase?.toLowerCase().includes("t-storms")) {
+      setBGGif(
+        "url('https://mdbgo.io/ascensus/mdb-advanced/img/thunderstorm.gif')"
+      );
+    }
+    // if it doesnt include any of the above, set it to sunny
+    if (
+      !dayPhrase?.toLowerCase().includes("snow") &&
+      !dayPhrase?.toLowerCase().includes("cloud") &&
+      !dayPhrase?.toLowerCase().includes("fog") &&
+      !dayPhrase?.toLowerCase().includes("rain") &&
+      !dayPhrase?.toLowerCase().includes("shower") &&
+      !dayPhrase?.toLowerCase().includes("sunny") &&
+      !dayPhrase?.toLowerCase().includes("t-storms")
+    ) {
+      setBGGif("url('https://mdbgo.io/ascensus/mdb-advanced/img/clear.gif')");
+    }
+  }, [dayPhrase]);
 
   return (
-    <>
-      {
-        <Flex
-          borderWidth="1px"
-          borderRadius="lg"
-          flexDir={"column"}
-          //   width={isSmallerThan600px ? "300px" : "700px"}
-          //   h={"270px"}
-          //   w={"1 rem"}
-          gap={3}
-          p="4"
-          mb="4"
-          boxShadow="md"
+    <Container>
+      <Flex direction="column" width={"260px"}>
+        <Box
+          borderRadius={"10px"}
+          backgroundImage={
+            bgGif ??
+            "url(https://mdbgo.io/ascensus/mdb-advanced/img/clouds.gif)"
+          }
+          height={"300px"}
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
+          backgroundSize="cover"
         >
-          <Text fontSize="lg" fontWeight="bold" mb="2">
-            {date}
-          </Text>
-          <Text>
-            Day:{" "}
-            {`${tempMetric ? maxTempMetric : maxTempImperial}°${
-              tempMetric ? "C" : "F"
-            }`}
-          </Text>
-          <Text>
-            Night:{" "}
-            {`${tempMetric ? minTempMetric : minTempImperial}°${
-              tempMetric ? "C" : "F"
-            }`}
-          </Text>
-          <Text mt="2" fontStyle="italic">
-            Day: {dayPhrase}
-          </Text>
-          <Text mt="2" fontStyle="italic">
-            Night: {nightPhrase}
-          </Text>
-        </Flex>
-      }
-    </>
+          <Box p={4} border={0}>
+            <VStack spacing="3">
+              <Text fontSize="2xl" color="white">
+                {date}
+              </Text>
+              <Text fontSize={"2xl"} {...commonTextStyle}>
+                {dayPhrase}
+              </Text>
+              <Text fontSize="5xl" color="white">
+                {`${tempMetric ? maxTempMetric : maxTempImperial}°${
+                  tempMetric ? "C" : "F"
+                }`}
+              </Text>
+              <HStack>
+                <Text fontSize={"xl"} {...commonTextStyle}>
+                  Night:{" "}
+                  {`${tempMetric ? minTempMetric : minTempImperial}°${
+                    tempMetric ? "C" : "F"
+                  }`}
+                </Text>
+              </HStack>
+            </VStack>
+          </Box>
+        </Box>
+      </Flex>
+    </Container>
   );
 };
 
-export default ForecastCard;
+export default ForecastCardV2;

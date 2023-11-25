@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/layout";
 import Search from "../components/Search";
 import Forecast from "../components/forecast/Forecast";
 import Header from "../layout/Header";
-import ForecastCardV2 from "../components/forecast/forecastCardV2";
+import ForecastCardV2 from "../components/forecast/ForecastCard";
 
 const HomePage: React.FC = () => {
   // add background gif if currentCity is sunny or cloudy
