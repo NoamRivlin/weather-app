@@ -1,10 +1,14 @@
 // import { ReactNode } from "react";
-import { Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import Navbar from "../components/navbar/Navbar";
+import CloudsHeader from "../components/animations/CloudsHeader";
 
 const RootLayoutHeader: React.FC = () => {
   return (
     <>
+      <Box height={""}>
+        <CloudsHeader />
+      </Box>
       <Flex
         align="center"
         justify="space-between"

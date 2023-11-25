@@ -2,25 +2,15 @@ import React from "react";
 import { AppDispatch, RootState } from "../../features/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {
-  Box,
-  Flex,
-  Grid,
-  Text,
-  useMediaQuery,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, useMediaQuery, useToast } from "@chakra-ui/react";
 import { getFiveDaysForecast } from "../../features/weather/weatherSlice";
 import ForecastCard from "./ForecastCard";
-import { wrap } from "lodash";
 
 const Forecast: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    fiveDaysForecast,
-    loading: forecastLoading,
-    error,
-  } = useSelector((state: RootState) => state.weather);
+  const { fiveDaysForecast, error } = useSelector(
+    (state: RootState) => state.weather
+  );
 
   const { currentCity } = useSelector((state: RootState) => state.search);
 
@@ -30,7 +20,7 @@ const Forecast: React.FC = () => {
     }
   }, [currentCity, dispatch]);
 
-  const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
+  const [isLessThan700px] = useMediaQuery("(max-width: 700px)");
 
   const toast = useToast();
   React.useEffect(() => {
@@ -48,14 +38,18 @@ const Forecast: React.FC = () => {
 
   return (
     <>
-      <h1>Forecast</h1>
-      <Flex p={8} flexWrap={"wrap"} gap={5}>
-        {/* <Grid templateColumns="repeat(5, 1fr)" gap={3} p={8} flexWrap={ true}> */}
+      <Flex
+        mt={14}
+        justifyContent={isLessThan700px ? "center" : "start"}
+        flexDir={isLessThan700px ? "column" : "row"}
+        alignSelf={isLessThan700px ? "center " : ""}
+        gap={isLessThan700px ? "30px" : "10px"}
+        overflowX={"scroll"}
+      >
         {fiveDaysForecast &&
-          fiveDaysForecast.map((dialyForecast) => (
-            <ForecastCard {...dialyForecast} key={dialyForecast.date} />
+          fiveDaysForecast.map((dailyForecast) => (
+            <ForecastCard {...dailyForecast} key={dailyForecast.date} />
           ))}
-        {/* </Grid> */}
       </Flex>
     </>
   );

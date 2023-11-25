@@ -13,6 +13,7 @@ interface SearchState {
   error: string | null;
   cities: City[] | null;
   currentCity: City | null;
+  favoriteCities: City[] | null;
 }
 
 const initialState: SearchState = {
@@ -20,6 +21,7 @@ const initialState: SearchState = {
   error: null,
   cities: null,
   currentCity: { value: "215854", label: "Tel Aviv" },
+  favoriteCities: null,
 };
 
 export const getCity = createAsyncThunk<
@@ -29,7 +31,6 @@ export const getCity = createAsyncThunk<
 >("search/getCity", async (cityName, thunkAPI) => {
   try {
     const response = await axios.get(`${CLIENT_URI}/api/cities/${cityName}`);
-    // console.log("response", response.data);
 
     return response.data;
   } catch (error: any) {
@@ -46,6 +47,9 @@ const search = createSlice({
   reducers: {
     setCurrentCity(state, action) {
       state.currentCity = action.payload;
+    },
+    updateFavoriteCities(state, action) {
+      state.favoriteCities = action.payload;
     },
   },
   extraReducers: (builder) => {
