@@ -30,11 +30,10 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
         <Flex
           borderWidth="1px"
           borderRadius="lg"
-          //   flexDirection={isSmallerThan600px ? "column" : "row"}
           flexDir={"column"}
           //   width={isSmallerThan600px ? "300px" : "700px"}
-          h={"260px"}
-          w={"300px"}
+          //   h={"270px"}
+          //   w={"1 rem"}
           gap={3}
           p="4"
           mb="4"
@@ -44,11 +43,13 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
             {date}
           </Text>
           <Text>
+            Day:{" "}
             {`${tempMetric ? maxTempMetric : maxTempImperial}°${
               tempMetric ? "C" : "F"
             }`}
           </Text>
           <Text>
+            Night:{" "}
             {`${tempMetric ? minTempMetric : minTempImperial}°${
               tempMetric ? "C" : "F"
             }`}

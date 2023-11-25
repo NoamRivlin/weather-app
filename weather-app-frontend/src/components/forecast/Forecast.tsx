@@ -30,7 +30,10 @@ const Forecast: React.FC = () => {
     }
   }, [currentCity, dispatch]);
 
-  const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
+  const [isAbove1100px, isAbove600px] = useMediaQuery([
+    "(min-width: 1100px)",
+    "(min-width: 600px)",
+  ]);
 
   const toast = useToast();
   React.useEffect(() => {
@@ -48,15 +51,32 @@ const Forecast: React.FC = () => {
 
   return (
     <>
-      <h1>Forecast</h1>
-      <Flex p={8} flexWrap={"wrap"} gap={5}>
-        {/* <Grid templateColumns="repeat(5, 1fr)" gap={3} p={8} flexWrap={ true}> */}
+      {/* <Grid
+        mt="10"
+        templateColumns={
+          isAbove1100px
+            ? "repeat(5, 1fr)"
+            : // : isAbove600px
+              // ? "repeat(2, 1fr)"
+              "repeat(1, 1fr)"
+        }
+        // gap={2}
+        justifyItems="center" // Center the items horizontally
+      > */}
+      <Flex
+        mt={14}
+        justify="center"
+        alignSelf={isAbove1100px ? " " : "center"}
+        // justifyContent="space-around"
+        gap={isAbove1100px ? "100px" : 7}
+        flexDir={isAbove1100px ? "row" : "column"}
+      >
         {fiveDaysForecast &&
-          fiveDaysForecast.map((dialyForecast) => (
-            <ForecastCard {...dialyForecast} key={dialyForecast.date} />
+          fiveDaysForecast.map((dailyForecast) => (
+            <ForecastCard {...dailyForecast} key={dailyForecast.date} />
           ))}
-        {/* </Grid> */}
       </Flex>
+      {/* </Grid> */}
     </>
   );
 };
