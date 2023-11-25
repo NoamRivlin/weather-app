@@ -28,20 +28,20 @@ const Navbar: React.FC = () => {
           onClick={handleToggle}
         />
       ) : (
-        <Box>
+        <Flex gap={3}>
           <NavButtons />
-        </Box>
+        </Flex>
       )}
 
       {/* Responsive Menu */}
       {isOpen && (
         <Flex
-          direction="column"
+          direction="row"
           position="absolute"
           top="64px"
           right="0"
           p={4}
-          gap={1.5}
+          gap={2}
         >
           <NavButtons />
         </Flex>

@@ -12,7 +12,7 @@ interface CurrWeather {
 }
 
 // this is for search results,
-interface FiveDaysForecast {
+export interface FiveDaysForecast {
   date: string;
   minTempMetric: number;
   minTempImperial: number;
@@ -26,12 +26,14 @@ interface WeatherState {
   loading: boolean;
   error: string | null;
   currWeather: CurrWeather | null;
+  tempMetric: boolean;
   fiveDaysForecast: FiveDaysForecast[] | null;
 }
 
 const initialState: WeatherState = {
   loading: false,
   error: null,
+  tempMetric: true,
   currWeather: null,
   fiveDaysForecast: null,
 };
@@ -66,53 +68,7 @@ export const getFiveDaysForecast = createAsyncThunk<
     // console.log("response", response.data);
 
     // return response.data;
-    return [
-      {
-        date: "24.11",
-        minTempMetric: 62,
-        maxTempMetric: 80,
-        minTempImperial: 143.6,
-        maxTempImperial: 176,
-        dayPhrase: "Hazy sunshine",
-        nightPhrase: "Mostly cloudy",
-      },
-      {
-        date: "25.11",
-        minTempMetric: 67,
-        maxTempMetric: 78,
-        minTempImperial: 152.6,
-        maxTempImperial: 172.4,
-        dayPhrase: "Mostly cloudy",
-        nightPhrase: "Partly cloudy",
-      },
-      {
-        date: "26.11",
-        minTempMetric: 63,
-        maxTempMetric: 76,
-        minTempImperial: 145.4,
-        maxTempImperial: 168.8,
-        dayPhrase: "Hazy sunshine",
-        nightPhrase: "Rain",
-      },
-      {
-        date: "27.11",
-        minTempMetric: 59,
-        maxTempMetric: 69,
-        minTempImperial: 138.2,
-        maxTempImperial: 156.2,
-        dayPhrase: "Intermittent clouds",
-        nightPhrase: "Intermittent clouds",
-      },
-      {
-        date: "28.11",
-        minTempMetric: 57,
-        maxTempMetric: 69,
-        minTempImperial: 134.6,
-        maxTempImperial: 156.2,
-        dayPhrase: "Intermittent clouds",
-        nightPhrase: "Partly cloudy",
-      },
-    ];
+    return mockWeather;
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -124,7 +80,11 @@ export const getFiveDaysForecast = createAsyncThunk<
 const weather = createSlice({
   name: "weather",
   initialState,
-  reducers: {},
+  reducers: {
+    setTempMetric(state) {
+      state.tempMetric = !state.tempMetric;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCurrentWeather.pending, (state) => {
       state.loading = true;
@@ -160,4 +120,53 @@ const weather = createSlice({
   },
 });
 
+export const { setTempMetric } = weather.actions;
 export default weather.reducer;
+
+const mockWeather = [
+  {
+    date: "24.11",
+    minTempMetric: 16,
+    maxTempMetric: 27,
+    minTempImperial: 62,
+    maxTempImperial: 80,
+    dayPhrase: "Hazy sunshine",
+    nightPhrase: "Mostly cloudy",
+  },
+  {
+    date: "25.11",
+    minTempMetric: 19,
+    maxTempMetric: 25,
+    minTempImperial: 67,
+    maxTempImperial: 78,
+    dayPhrase: "Mostly cloudy",
+    nightPhrase: "Partly cloudy",
+  },
+  {
+    date: "26.11",
+    minTempMetric: 17,
+    maxTempMetric: 25,
+    minTempImperial: 63,
+    maxTempImperial: 76,
+    dayPhrase: "Hazy sunshine",
+    nightPhrase: "Rain",
+  },
+  {
+    date: "27.11",
+    minTempMetric: 15,
+    maxTempMetric: 21,
+    minTempImperial: 59,
+    maxTempImperial: 69,
+    dayPhrase: "Intermittent clouds",
+    nightPhrase: "Intermittent clouds",
+  },
+  {
+    date: "28.11",
+    minTempMetric: 14,
+    maxTempMetric: 21,
+    minTempImperial: 57,
+    maxTempImperial: 69,
+    dayPhrase: "Intermittent clouds",
+    nightPhrase: "Partly cloudy",
+  },
+];
