@@ -63,7 +63,7 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
 
   return (
     <Container>
-      <Flex direction="column" width={"260px"}>
+      <Flex direction="column" width={"260px"} height={"350px"}>
         <Box
           borderRadius={"10px"}
           backgroundImage={
