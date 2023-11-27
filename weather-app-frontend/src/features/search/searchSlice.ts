@@ -5,7 +5,7 @@ const CLIENT_URI = import.meta.env.VITE_REACT_CLIENT_URI as string;
 export interface City {
   // name of the city
   label: string;
-  // city key
+  // city id
   value: string;
 }
 interface SearchState {
@@ -13,15 +13,20 @@ interface SearchState {
   error: string | null;
   cities: City[] | null;
   currentCity: City | null;
+  ignoreGeoLocation: boolean;
   favoriteCities: City[] | null;
+  geoLoading: boolean;
 }
 
 const initialState: SearchState = {
   loading: false,
   error: null,
   cities: null,
+  ignoreGeoLocation: false,
   currentCity: { value: "215854", label: "Tel Aviv" },
+  geoLoading: false,
   // favoriteCities: null,
+  // for showcasing purposes
   favoriteCities: [
     {
       label: "New York",
@@ -47,10 +52,6 @@ const initialState: SearchState = {
       label: "Findikli",
       value: "1302404",
     },
-    {
-      label: "Fingoe",
-      value: "246301",
-    },
   ],
 };
 
@@ -71,12 +72,39 @@ export const getCity = createAsyncThunk<
   }
 });
 
+export const getCityByGeoLocation = createAsyncThunk<
+  City,
+  { lat: string; lon: string },
+  { rejectValue: string }
+>("search/getCityByGeoLocation", async ({ lat, lon }, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `${CLIENT_URI}/api/cities/byGeo/${lat}/${lon}`
+    );
+
+    return response.data;
+    // for showcasing purposes
+    // return {
+    //   label: "Qiryat Ono",
+    //   value: "215847",
+    // };
+  } catch (error: any) {
+    if (error instanceof AxiosError) {
+      return thunkAPI.rejectWithValue(error.response?.data);
+    }
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
 const search = createSlice({
   name: "search",
   initialState,
   reducers: {
     setCurrentCity(state, action) {
       state.currentCity = action.payload;
+    },
+    setGeoLoading(state, action) {
+      state.geoLoading = action.payload;
     },
     updateFavoriteCities(state, action) {
       const newFavoriteCities = action.payload;
@@ -86,6 +114,9 @@ const search = createSlice({
       } else {
         state.favoriteCities = null;
       }
+    },
+    setIgnoreGeoLocation(state, action) {
+      state.ignoreGeoLocation = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -104,8 +135,29 @@ const search = createSlice({
       state.error = action.payload as string;
       state.cities = null;
     });
+    builder.addCase(getCityByGeoLocation.pending, (state) => {
+      state.loading = true;
+
+      state.error = null;
+      state.currentCity = null;
+    });
+    builder.addCase(getCityByGeoLocation.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.currentCity = action.payload;
+    });
+    builder.addCase(getCityByGeoLocation.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+      state.currentCity = null;
+    });
   },
 });
 
-export const { setCurrentCity, updateFavoriteCities } = search.actions;
+export const {
+  setCurrentCity,
+  updateFavoriteCities,
+  setIgnoreGeoLocation,
+  setGeoLoading,
+} = search.actions;
 export default search.reducer;
