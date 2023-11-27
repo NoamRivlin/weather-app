@@ -97,6 +97,13 @@ const Search: React.FC = () => {
       return;
     }
     dispatch(setGeoLoading(true));
+    toast({
+      title: "Please allow geolocation to get your current city. ",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+      position: "top",
+    });
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
