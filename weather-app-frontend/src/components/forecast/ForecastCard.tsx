@@ -63,14 +63,14 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
 
   return (
     <Container>
-      <Flex direction="column" width={"260px"}>
+      <Flex direction="column" width={"260px"} height={"350px"}>
         <Box
           borderRadius={"10px"}
           backgroundImage={
             bgGif ??
             "url(https://mdbgo.io/ascensus/mdb-advanced/img/clouds.gif)"
           }
-          height={"300px"}
+          height={"450px"}
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
           backgroundSize="cover"

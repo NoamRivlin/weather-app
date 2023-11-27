@@ -8,6 +8,7 @@ export interface FavoriteCitiesCurrentWeather {
   temperatureImperial: number;
   weatherText: string;
   cityName: string;
+  cityKey: string;
 }
 
 export interface FiveDaysForecast {
@@ -44,7 +45,7 @@ export const getCurrentWeather = createAsyncThunk<
   try {
     const response = await axios.get(`${CLIENT_URI}/api/weather/${cityKey}`);
 
-    return { ...response.data, cityName };
+    return { ...response.data, cityName, cityKey };
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -63,8 +64,8 @@ export const getFiveDaysForecast = createAsyncThunk<
       `${CLIENT_URI}/api/weather/fiveDaily/${cityKey}`
     );
 
-    return response.data;
-    // return mockWeather;
+    // return response.data;
+    return mockFiveDaysForecast;
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -90,6 +91,8 @@ const weather = createSlice({
     builder.addCase(getCurrentWeather.fulfilled, (state, action) => {
       state.loading = false;
       state.error = null;
+      // here we check if the city is already in the array,
+      //    if it is we don't add it again
       state.FavoriteCitiesCurrentWeather =
         state.FavoriteCitiesCurrentWeather.some(
           (city) => city.cityName === action.payload.cityName
@@ -124,7 +127,7 @@ const weather = createSlice({
 export const { setTempMetric } = weather.actions;
 export default weather.reducer;
 
-const mockWeather = [
+const mockFiveDaysForecast = [
   {
     date: "24.11",
     minTempMetric: 16,

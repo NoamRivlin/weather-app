@@ -6,21 +6,25 @@ import {
   Container,
   VStack,
   useColorMode,
+  Button,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { FavoriteCitiesCurrentWeather } from "../../features/weather/weatherSlice";
+import { useNavigate } from "react-router-dom";
 
 const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
   const [bgGif, setBGGif] = useState<string | undefined>(undefined);
   const { tempMetric } = useSelector((state: RootState) => state.weather);
   const { colorMode } = useColorMode();
+  const navigate = useNavigate();
 
   const {
     temperatureMetric,
     temperatureImperial,
     weatherText: dayPhrase,
     cityName,
+    cityKey,
   } = props;
 
   const commonTextStyle = {
@@ -71,6 +75,17 @@ const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
           backgroundSize="cover"
+          onClick={() => {
+            console.log(cityKey);
+          }}
+          cursor={"pointer"}
+          _hover={{
+            boxShadow:
+              colorMode === "light"
+                ? "0 4px 8px rgba(0, 0, 0, 0.6)"
+                : " 0 4px 8px rgba(255, 255, 255, 0.6)",
+            transform: "scale(1.05)",
+          }}
         >
           <Box p={4} border={0}>
             <VStack spacing="3">
