@@ -8,9 +8,10 @@ const API_KEYS = [
   process.env.API_KEY2 as string,
   process.env.API_KEY3 as string,
   process.env.API_KEY4 as string,
+  process.env.API_KEY5 as string,
 ];
 
-let currentApiKeyIndex = 3;
+let currentApiKeyIndex = 4;
 export const getCity = async (req: Request, res: Response) => {
   try {
     const { cityName } = req.params;
