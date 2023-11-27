@@ -12,12 +12,19 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { FavoriteCitiesCurrentWeather } from "../../features/weather/weatherSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  setCurrentCity,
+  setIgnoreGeoLocation,
+} from "../../features/search/searchSlice";
 
 const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
   const [bgGif, setBGGif] = useState<string | undefined>(undefined);
   const { tempMetric } = useSelector((state: RootState) => state.weather);
+  const { currentCity } = useSelector((state: RootState) => state.search);
   const { colorMode } = useColorMode();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     temperatureMetric,
@@ -76,7 +83,9 @@ const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
           backgroundRepeat="no-repeat"
           backgroundSize="cover"
           onClick={() => {
-            console.log(cityKey);
+            dispatch(setIgnoreGeoLocation(true));
+            dispatch(setCurrentCity({ value: cityKey, label: cityName }));
+            navigate(`/`);
           }}
           cursor={"pointer"}
           _hover={{

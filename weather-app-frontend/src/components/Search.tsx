@@ -13,7 +13,10 @@ import { Select } from "chakra-react-select";
 import { useDispatch } from "react-redux";
 import {
   getCity,
+  getCityByGeoLocation,
   setCurrentCity,
+  setGeoLoading,
+  setIgnoreGeoLocation,
   updateFavoriteCities,
 } from "../features/search/searchSlice";
 import { AppDispatch, RootState } from "../features/store";
@@ -29,6 +32,7 @@ const Search: React.FC = () => {
     currentCity,
     error,
     favoriteCities,
+    ignoreGeoLocation,
   } = useSelector((state: RootState) => state.search);
 
   const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
@@ -48,10 +52,20 @@ const Search: React.FC = () => {
   }, [error, toast]);
 
   const debouncedDispatch = debounce((value: string) => {
+    setIgnoreGeoLocation(true);
     dispatch(getCity(value));
   }, 1000);
 
   const onChangeHandler = (value: string) => {
+    if (/[^\u0000-\u007F]+/.test(value)) {
+      toast({
+        title: "Please enter a valid city name in english letters only",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    }
     if (value.length >= 3) {
       debouncedDispatch(value.toLocaleLowerCase());
     }
@@ -77,6 +91,44 @@ const Search: React.FC = () => {
       }
     }
   };
+
+  const getCurrentCityFromGeoLocation = () => {
+    if (ignoreGeoLocation) {
+      return;
+    }
+    dispatch(setGeoLoading(true));
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+
+        const latitudeString = latitude.toString();
+        const longitudeString = longitude.toString();
+
+        dispatch(
+          getCityByGeoLocation({ lat: latitudeString, lon: longitudeString })
+        );
+        dispatch(setIgnoreGeoLocation(true));
+        dispatch(setGeoLoading(false));
+      },
+      (error) => {
+        toast({
+          title: "An error occurred.",
+          description: "Unable to get geolocation.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+        console.error("Error getting geolocation:", error.message);
+        dispatch(setGeoLoading(false));
+        setIgnoreGeoLocation(true);
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    getCurrentCityFromGeoLocation();
+  }, []);
 
   React.useEffect(() => {
     if (!favoriteCities) {
@@ -105,6 +157,7 @@ const Search: React.FC = () => {
             isLoading={searchLoading}
             closeMenuOnSelect={true}
             onChange={(value) => {
+              dispatch(setIgnoreGeoLocation(true));
               dispatch(setCurrentCity(value));
             }}
             onInputChange={(value) => {

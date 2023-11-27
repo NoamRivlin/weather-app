@@ -2,13 +2,7 @@ import React from "react";
 import { AppDispatch, RootState } from "../../features/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {
-  Center,
-  Grid,
-  Heading,
-  useMediaQuery,
-  useToast,
-} from "@chakra-ui/react";
+import { Center, Grid, Heading, useToast } from "@chakra-ui/react";
 import { getCurrentWeather } from "../../features/weather/weatherSlice";
 import FavoriteCard from "./FavoriteCard";
 import { City, updateFavoriteCities } from "../../features/search/searchSlice";
@@ -22,29 +16,27 @@ const Favorites: React.FC = () => {
   const { FavoriteCitiesCurrentWeather, loading } = useSelector(
     (state: RootState) => state.weather
   );
-  //   React.useEffect(() => {
-  //     if (!favoriteCities) {
-  //       const favoriteCitiesFromLocalStorage =
-  //         localStorage.getItem("favoriteCities");
-  //       if (favoriteCitiesFromLocalStorage) {
-  //         dispatch(
-  //           updateFavoriteCities(JSON.parse(favoriteCitiesFromLocalStorage))
-  //         );
-  //       }
-  //     }
-  //   }, [favoriteCities]);
+  React.useEffect(() => {
+    if (!favoriteCities) {
+      const favoriteCitiesFromLocalStorage =
+        localStorage.getItem("favoriteCities");
+      if (favoriteCitiesFromLocalStorage) {
+        dispatch(
+          updateFavoriteCities(JSON.parse(favoriteCitiesFromLocalStorage))
+        );
+      }
+    }
+  }, [favoriteCities]);
 
-  //   React.useEffect(() => {
-  //     if (favoriteCities) {
-  //       favoriteCities.forEach((city: City) => {
-  //         dispatch(
-  //           getCurrentWeather({ cityKey: city.value, cityName: city.label })
-  //         );
-  //       });
-  //     }
-  //   }, []);
-
-  const [isLessThan700px] = useMediaQuery("(max-width: 700px)");
+  React.useEffect(() => {
+    if (favoriteCities) {
+      favoriteCities.forEach((city: City) => {
+        dispatch(
+          getCurrentWeather({ cityKey: city.value, cityName: city.label })
+        );
+      });
+    }
+  }, []);
 
   const toast = useToast();
   React.useEffect(() => {
@@ -60,30 +52,33 @@ const Favorites: React.FC = () => {
     }
   }, [error, toast]);
 
+  if (loading) {
+    return (
+      <Center>
+        <Heading mt={"100px"}>Loading...</Heading>
+      </Center>
+    );
+  }
+
   return (
     <>
       <Center>
         <Grid
           templateColumns={{
-            base: "repeat(1, 1fr)", // For screens smaller than 48em (768px)
-            md: "repeat(2, 1fr)", // For screens 48em (768px) and larger
-            lg: "repeat(3, 1fr)", // For screens 62em (992px) and larger
+            base: "repeat(1, 1fr)",
+            md: "repeat(2, 1fr)",
+            lg: "repeat(3, 1fr)",
           }}
           gap={6}
         >
-          {loading && (
-            <Heading alignSelf={"center"} justifySelf={"center"}>
-              Loading...
-            </Heading>
-          )}
-          {/* {FavoriteCitiesCurrentWeather &&
-          FavoriteCitiesCurrentWeather.map((cityWeather) => (
-            <FavoriteCard {...cityWeather} key={cityWeather.cityName} />
-          ))} */}
-          {mockFavoriteCitiesCurrentWeather &&
-            mockFavoriteCitiesCurrentWeather.map((cityWeather) => (
+          {FavoriteCitiesCurrentWeather &&
+            FavoriteCitiesCurrentWeather.map((cityWeather) => (
               <FavoriteCard {...cityWeather} key={cityWeather.cityName} />
             ))}
+          {/* {mockFavoriteCitiesCurrentWeather &&
+            mockFavoriteCitiesCurrentWeather.map((cityWeather) => (
+              <FavoriteCard {...cityWeather} key={cityWeather.cityName} />
+            ))} */}
         </Grid>
       </Center>
     </>

@@ -24,6 +24,7 @@
     "@chakra-ui/system": "^2.0.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@fontsource/lobster": "^5.0.17",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/react-redux": "^7.1.30",
     "axios": "^1.6.2",
