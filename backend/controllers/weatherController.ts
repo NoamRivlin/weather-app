@@ -78,7 +78,7 @@
 //   return `${day}.${month}`;
 // }
 import { Request, Response } from "express";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -86,9 +86,10 @@ const API_KEYS = [
   process.env.API_KEY1 as string,
   process.env.API_KEY2 as string,
   process.env.API_KEY3 as string,
+  process.env.API_KEY4 as string,
 ];
 
-let currentApiKeyIndex = 0;
+let currentApiKeyIndex = 3;
 
 export const currentWeather = async (req: Request, res: Response) => {
   try {
