@@ -70,7 +70,7 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
             bgGif ??
             "url(https://mdbgo.io/ascensus/mdb-advanced/img/clouds.gif)"
           }
-          height={"300px"}
+          height={"450px"}
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
           backgroundSize="cover"

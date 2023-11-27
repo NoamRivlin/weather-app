@@ -2,10 +2,16 @@ import React from "react";
 import { AppDispatch, RootState } from "../../features/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { Flex, Heading, useMediaQuery, useToast } from "@chakra-ui/react";
+import {
+  Center,
+  Grid,
+  Heading,
+  useMediaQuery,
+  useToast,
+} from "@chakra-ui/react";
 import { getCurrentWeather } from "../../features/weather/weatherSlice";
 import FavoriteCard from "./FavoriteCard";
-import { City } from "../../features/search/searchSlice";
+import { City, updateFavoriteCities } from "../../features/search/searchSlice";
 
 const Favorites: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,16 +22,27 @@ const Favorites: React.FC = () => {
   const { FavoriteCitiesCurrentWeather, loading } = useSelector(
     (state: RootState) => state.weather
   );
+  //   React.useEffect(() => {
+  //     if (!favoriteCities) {
+  //       const favoriteCitiesFromLocalStorage =
+  //         localStorage.getItem("favoriteCities");
+  //       if (favoriteCitiesFromLocalStorage) {
+  //         dispatch(
+  //           updateFavoriteCities(JSON.parse(favoriteCitiesFromLocalStorage))
+  //         );
+  //       }
+  //     }
+  //   }, [favoriteCities]);
 
-  React.useEffect(() => {
-    if (favoriteCities) {
-      favoriteCities.forEach((city: City) => {
-        dispatch(
-          getCurrentWeather({ cityKey: city.value, cityName: city.label })
-        );
-      });
-    }
-  }, []);
+  //   React.useEffect(() => {
+  //     if (favoriteCities) {
+  //       favoriteCities.forEach((city: City) => {
+  //         dispatch(
+  //           getCurrentWeather({ cityKey: city.value, cityName: city.label })
+  //         );
+  //       });
+  //     }
+  //   }, []);
 
   const [isLessThan700px] = useMediaQuery("(max-width: 700px)");
 
@@ -45,26 +62,90 @@ const Favorites: React.FC = () => {
 
   return (
     <>
-      <Flex
-        mt={14}
-        justifyContent={isLessThan700px ? "center" : "start"}
-        flexDir={isLessThan700px ? "column" : "row"}
-        alignSelf={isLessThan700px ? "center " : ""}
-        gap={isLessThan700px ? "30px" : ""}
-        overflowX={"auto"}
-      >
-        {loading && (
-          <Heading alignSelf={"center"} justifySelf={"center"}>
-            Loading...
-          </Heading>
-        )}
-        {FavoriteCitiesCurrentWeather &&
+      <Center>
+        <Grid
+          templateColumns={{
+            base: "repeat(1, 1fr)", // For screens smaller than 48em (768px)
+            md: "repeat(2, 1fr)", // For screens 48em (768px) and larger
+            lg: "repeat(3, 1fr)", // For screens 62em (992px) and larger
+          }}
+          gap={6}
+        >
+          {loading && (
+            <Heading alignSelf={"center"} justifySelf={"center"}>
+              Loading...
+            </Heading>
+          )}
+          {/* {FavoriteCitiesCurrentWeather &&
           FavoriteCitiesCurrentWeather.map((cityWeather) => (
             <FavoriteCard {...cityWeather} key={cityWeather.cityName} />
-          ))}
-      </Flex>
+          ))} */}
+          {mockFavoriteCitiesCurrentWeather &&
+            mockFavoriteCitiesCurrentWeather.map((cityWeather) => (
+              <FavoriteCard {...cityWeather} key={cityWeather.cityName} />
+            ))}
+        </Grid>
+      </Center>
     </>
   );
 };
 
 export default Favorites;
+const mockFavoriteCitiesCurrentWeather = [
+  {
+    isDayTime: true,
+    temperatureMetric: 35,
+    temperatureImperial: 94,
+    weatherText: "Clouds and sun",
+    cityName: "Fingoe",
+    cityKey: "246301",
+  },
+  {
+    isDayTime: true,
+    temperatureMetric: -4,
+    temperatureImperial: 25,
+    weatherText: "Partly sunny",
+    cityName: "Finspång",
+    cityKey: "309268",
+  },
+  {
+    isDayTime: true,
+    temperatureMetric: 6,
+    temperatureImperial: 43,
+    weatherText: "Mostly sunny",
+    cityName: "New York",
+    cityKey: "349727",
+  },
+  {
+    isDayTime: true,
+    temperatureMetric: 19,
+    temperatureImperial: 65,
+    weatherText: "Clouds and sun",
+    cityName: "Tel Aviv",
+    cityKey: "215854",
+  },
+  {
+    isDayTime: false,
+    temperatureMetric: 21,
+    temperatureImperial: 71,
+    weatherText: "Mostly cloudy",
+    cityName: "New Delhi",
+    cityKey: "187745",
+  },
+  {
+    isDayTime: true,
+    temperatureMetric: 5,
+    temperatureImperial: 41,
+    weatherText: "Partly sunny",
+    cityName: "Findikli",
+    cityKey: "1302404",
+  },
+  {
+    isDayTime: true,
+    temperatureMetric: 25,
+    temperatureImperial: 77,
+    weatherText: "Partly sunny",
+    cityName: "Finote Selam",
+    cityKey: "127220",
+  },
+];

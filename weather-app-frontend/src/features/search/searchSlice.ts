@@ -21,7 +21,37 @@ const initialState: SearchState = {
   error: null,
   cities: null,
   currentCity: { value: "215854", label: "Tel Aviv" },
-  favoriteCities: null,
+  // favoriteCities: null,
+  favoriteCities: [
+    {
+      label: "New York",
+      value: "349727",
+    },
+    {
+      value: "215854",
+      label: "Tel Aviv",
+    },
+    {
+      label: "New Delhi",
+      value: "187745",
+    },
+    {
+      label: "Finspång",
+      value: "309268",
+    },
+    {
+      label: "Finote Selam",
+      value: "127220",
+    },
+    {
+      label: "Findikli",
+      value: "1302404",
+    },
+    {
+      label: "Fingoe",
+      value: "246301",
+    },
+  ],
 };
 
 export const getCity = createAsyncThunk<
