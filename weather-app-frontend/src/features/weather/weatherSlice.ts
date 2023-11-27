@@ -64,8 +64,8 @@ export const getFiveDaysForecast = createAsyncThunk<
       `${CLIENT_URI}/api/weather/fiveDaily/${cityKey}`
     );
 
-    // return response.data;
-    return mockFiveDaysForecast;
+    return response.data;
+    // return mockFiveDaysForecast;
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);

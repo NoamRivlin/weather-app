@@ -2,17 +2,25 @@ import React from "react";
 import { AppDispatch, RootState } from "../../features/store";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { Flex, useMediaQuery, useToast } from "@chakra-ui/react";
+import {
+  Center,
+  Flex,
+  Heading,
+  useMediaQuery,
+  useToast,
+} from "@chakra-ui/react";
 import { getFiveDaysForecast } from "../../features/weather/weatherSlice";
 import ForecastCard from "./ForecastCard";
 
 const Forecast: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { fiveDaysForecast, error } = useSelector(
+  const { fiveDaysForecast, error, loading } = useSelector(
     (state: RootState) => state.weather
   );
 
-  const { currentCity } = useSelector((state: RootState) => state.search);
+  const { currentCity, geoLoading } = useSelector(
+    (state: RootState) => state.search
+  );
 
   React.useEffect(() => {
     if (currentCity) {
@@ -36,6 +44,13 @@ const Forecast: React.FC = () => {
     }
   }, [error, toast]);
 
+  if (loading || geoLoading) {
+    return (
+      <Center>
+        <Heading mt={"100px"}>Loading...</Heading>
+      </Center>
+    );
+  }
   return (
     <>
       <Flex
@@ -46,10 +61,9 @@ const Forecast: React.FC = () => {
         gap={isLessThan700px ? "30px" : "10px"}
         overflowX={"auto"}
       >
-        {fiveDaysForecast &&
-          fiveDaysForecast.map((dailyForecast) => (
-            <ForecastCard {...dailyForecast} key={dailyForecast.date} />
-          ))}
+        {fiveDaysForecast.map((dailyForecast) => (
+          <ForecastCard {...dailyForecast} key={dailyForecast.date} />
+        ))}
       </Flex>
     </>
   );
