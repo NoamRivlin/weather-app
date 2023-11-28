@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -6,7 +6,6 @@ import {
   Container,
   VStack,
   useColorMode,
-  Button,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
@@ -21,7 +20,6 @@ import {
 const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
   const [bgGif, setBGGif] = useState<string | undefined>(undefined);
   const { tempMetric } = useSelector((state: RootState) => state.weather);
-  const { currentCity } = useSelector((state: RootState) => state.search);
   const { colorMode } = useColorMode();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,7 +33,7 @@ const FavoriteCard: React.FC<FavoriteCitiesCurrentWeather> = ({ ...props }) => {
   } = props;
 
   const commonTextStyle = {
-    color: colorMode === "light" ? "white" : "white",
+    color: "white",
     backgroundColor: "black",
     p: "12px",
     borderRadius: "12px",

@@ -9,9 +9,10 @@ const API_KEYS = [
   process.env.API_KEY3 as string,
   process.env.API_KEY4 as string,
   process.env.API_KEY5 as string,
+  process.env.API_KEY6 as string,
 ];
 
-let currentApiKeyIndex = 4;
+let currentApiKeyIndex = 0;
 export const getCity = async (req: Request, res: Response) => {
   try {
     const { cityName } = req.params;
@@ -26,8 +27,7 @@ export const getCity = async (req: Request, res: Response) => {
     }));
     res.status(200).json(cities);
   } catch (error) {
-    console.log("error", error);
-    res.status(404).json({ message: "City not found" });
+    handleApiError(error, req, res, getCity);
   }
 };
 
@@ -44,7 +44,32 @@ export const getCityByGeoLocation = async (req: Request, res: Response) => {
     };
     res.status(200).json(leanCity);
   } catch (error) {
-    console.log("error", error);
-    res.status(404).json({ message: "City not found" });
+    handleApiError(error, req, res, getCityByGeoLocation);
   }
 };
+
+function handleApiError(
+  error: any,
+  req: Request,
+  res: Response,
+  retryFunction: (req: Request, res: Response) => Promise<void>
+) {
+  console.log("error", error);
+
+  if (
+    error.response?.status > 205 &&
+    currentApiKeyIndex < API_KEYS.length - 1
+  ) {
+    // Retry with the next API key
+    currentApiKeyIndex++;
+    console.log(`Retrying with API key ${currentApiKeyIndex}`);
+    return retryFunction(req, res);
+  }
+
+  res
+    .status(404)
+    .json(
+      error.response?.statusText ||
+        error.response?.data.Code || { message: error }
+    );
+}

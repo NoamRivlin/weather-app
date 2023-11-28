@@ -1,5 +1,5 @@
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Button, Flex, Icon, IconButton, useColorMode } from "@chakra-ui/react";
+import { Button, IconButton, useColorMode } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import routes from "../../routes";

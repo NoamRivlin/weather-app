@@ -6,7 +6,11 @@ const API_KEYS = [
   process.env.API_KEY1 as string,
   process.env.API_KEY2 as string,
   process.env.API_KEY3 as string,
+  process.env.API_KEY4 as string,
+  process.env.API_KEY5 as string,
+  process.env.API_KEY6 as string,
 ];
+
 let currentApiKeyIndex = 0;
 
 export const getNextApiKey = (): string => {
