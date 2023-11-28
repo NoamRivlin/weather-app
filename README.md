@@ -3,11 +3,16 @@
 This is a web-based weather application that provides current weather conditions and a five-day forecast. The application is built using Vite, TypeScript, Chakra UI, Redux, and Express. It leverages the AccuWeather API to fetch weather data.
 
 ## Screenshots and videos
-
 ![Screenshot 2023-11-28 at 15 46 59](https://github.com/NoamRivlin/noam-rivlin-19-11-23/assets/88899637/4fa1c60e-082e-42ce-94cb-83b3b78e4712)
 
 
+###### Functionality
 https://github.com/NoamRivlin/noam-rivlin-19-11-23/assets/88899637/deab78c2-b7bc-4c96-9429-4bcf19384121
+
+
+###### Responsiveness
+https://github.com/NoamRivlin/noam-rivlin-19-11-23/assets/88899637/0c40e6d0-0d52-4d58-8e1c-6c05ffbe6c57
+
 
 
 
