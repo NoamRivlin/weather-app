@@ -15,7 +15,6 @@ import { FiveDaysForecast } from "../../features/weather/weatherSlice";
 const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
   const [bgGif, setBGGif] = useState<string | undefined>(undefined);
   const { tempMetric } = useSelector((state: RootState) => state.weather);
-  const { colorMode } = useColorMode();
 
   const {
     date,
