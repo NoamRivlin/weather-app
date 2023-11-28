@@ -104,6 +104,7 @@ const Search: React.FC = () => {
       isClosable: true,
       position: "top",
     });
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -129,6 +130,7 @@ const Search: React.FC = () => {
         console.error("Error getting geolocation:", error.message);
         dispatch(setGeoLoading(false));
         setIgnoreGeoLocation(true);
+        dispatch(setCurrentCity({ value: "215854", label: "Tel Aviv" }));
       }
     );
   };
