@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Flex, Box, IconButton, useMediaQuery } from "@chakra-ui/react";
+import { Flex, IconButton, useMediaQuery } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import NavButtons from "./NavButtons";
 

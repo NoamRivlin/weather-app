@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -27,7 +27,7 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
   } = props;
 
   const commonTextStyle = {
-    color: colorMode === "light" ? "white" : "white",
+    color: "white",
     backgroundColor: "black",
     p: "12px",
     borderRadius: "12px",

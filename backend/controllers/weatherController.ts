@@ -3,14 +3,23 @@
 // import dotenv from "dotenv";
 // dotenv.config();
 
-// const API_KEY = process.env.API_KEY;
+// const API_KEYS = [
+//   process.env.API_KEY1 as string,
+//   process.env.API_KEY2 as string,
+//   process.env.API_KEY3 as string,
+//   process.env.API_KEY4 as string,
+//   process.env.API_KEY5 as string,
+// ];
+
+// let currentApiKeyIndex = 4;
 
 // export const currentWeather = async (req: Request, res: Response) => {
 //   try {
 //     const { cityKey } = req.params;
+//     const apiKey = API_KEYS[currentApiKeyIndex];
 
 //     const response = await axios.get(
-//       `https://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=${API_KEY}`
+//       `https://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=${apiKey}`
 //     );
 
 //     const currentWeather = response.data[0];
@@ -22,23 +31,20 @@
 //       ),
 //       weatherText: currentWeather.WeatherText,
 //     };
+
 //     res.status(200).json(leanCurrentWeather);
 //   } catch (error: any) {
-//     console.log("error", error);
-//     res
-//       .status(404)
-//       .json(
-//         error.response?.statusText || error.data.Code || { message: "error" }
-//       );
+//     handleApiError(error, req, res);
 //   }
 // };
 
 // export const fiveDailyForecast = async (req: Request, res: Response) => {
 //   try {
 //     const { cityKey } = req.params;
+//     const apiKey = API_KEYS[currentApiKeyIndex];
 
 //     const response = await axios.get(
-//       `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=${API_KEY}&metric=true`
+//       `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityKey}?apikey=${apiKey}&metric=true`
 //     );
 
 //     const fiveDailyforecast = response.data.DailyForecasts;
@@ -55,14 +61,10 @@
 //       dayPhrase: day.Day.IconPhrase,
 //       nightPhrase: day.Night.IconPhrase,
 //     }));
+
 //     res.status(200).json(leanFiveDailyforecast);
 //   } catch (error: any) {
-//     console.log("error", error);
-//     res
-//       .status(404)
-//       .json(
-//         error.response?.statusText || error.data.Code || { message: "error" }
-//       );
+//     handleApiError(error, req, res);
 //   }
 // };
 
@@ -71,18 +73,39 @@
 
 // function formatDate(inputDate: string) {
 //   const date = new Date(inputDate);
-//   // Get day and month with leading zeros
 //   const day = String(date.getDate()).padStart(2, "0");
-//   const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+//   const month = String(date.getMonth() + 1).padStart(2, "0");
 
 //   return `${day}.${month}`;
 // }
+
+// // WIP
+// function handleApiError(error: any, req: Request, res: Response) {
+//   console.log("error", error);
+
+//   if (
+//     error.response?.status > 205 &&
+//     currentApiKeyIndex < API_KEYS.length - 1
+//   ) {
+//     // Retry with the next API key
+//     currentApiKeyIndex++;
+//     console.log(`Retrying with API key ${currentApiKeyIndex + 1}`);
+//     return currentWeather(req, res);
+//   }
+
+//   res
+//     .status(404)
+//     .json(
+//       error.response?.statusText ||
+//         error.response?.data.Code || { message: "error" }
+//     );
+// }
+
 import { Request, Response } from "express";
 import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
-const API_KEY = process.env.API_KEY;
 const API_KEYS = [
   process.env.API_KEY1 as string,
   process.env.API_KEY2 as string,
@@ -91,7 +114,7 @@ const API_KEYS = [
   process.env.API_KEY5 as string,
 ];
 
-let currentApiKeyIndex = 4;
+let currentApiKeyIndex = 2;
 
 export const currentWeather = async (req: Request, res: Response) => {
   try {
@@ -114,7 +137,7 @@ export const currentWeather = async (req: Request, res: Response) => {
 
     res.status(200).json(leanCurrentWeather);
   } catch (error: any) {
-    handleApiError(error, req, res);
+    handleApiError(error, req, res, currentWeather);
   }
 };
 
@@ -144,9 +167,35 @@ export const fiveDailyForecast = async (req: Request, res: Response) => {
 
     res.status(200).json(leanFiveDailyforecast);
   } catch (error: any) {
-    handleApiError(error, req, res);
+    handleApiError(error, req, res, fiveDailyForecast);
   }
 };
+
+function handleApiError(
+  error: any,
+  req: Request,
+  res: Response,
+  retryFunction: (req: Request, res: Response) => Promise<void>
+) {
+  console.log("error", error);
+
+  if (
+    error.response?.status > 205 &&
+    currentApiKeyIndex < API_KEYS.length - 1
+  ) {
+    // Retry with the next API key
+    currentApiKeyIndex++;
+    console.log(`Retrying with API key ${currentApiKeyIndex}`);
+    return retryFunction(req, res);
+  }
+
+  res
+    .status(404)
+    .json(
+      error.response?.statusText ||
+        error.response?.data.Code || { message: error }
+    );
+}
 
 const celciusToFahrenheit = (celcius: number) =>
   Math.round((celcius * 9) / 5 + 32);
@@ -157,25 +206,4 @@ function formatDate(inputDate: string) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
 
   return `${day}.${month}`;
-}
-
-function handleApiError(error: any, req: Request, res: Response) {
-  console.log("error", error);
-
-  if (
-    error.response?.status > 205 &&
-    currentApiKeyIndex < API_KEYS.length - 1
-  ) {
-    // Retry with the next API key
-    currentApiKeyIndex++;
-    console.log(`Retrying with API key ${currentApiKeyIndex + 1}`);
-    return currentWeather(req, res);
-  }
-
-  res
-    .status(404)
-    .json(
-      error.response?.statusText ||
-        error.response?.data.Code || { message: "error" }
-    );
 }

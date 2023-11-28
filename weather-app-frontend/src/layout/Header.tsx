@@ -5,7 +5,7 @@ import CloudsHeader from "../components/animations/CloudsHeader";
 const RootLayoutHeader: React.FC = () => {
   return (
     <>
-      <Box height={""}>
+      <Box>
         <CloudsHeader />
       </Box>
       <Flex
@@ -14,7 +14,7 @@ const RootLayoutHeader: React.FC = () => {
         padding={{ base: "0.5rem", md: "1rem" }}
       >
         <Heading fontSize="4xl" fontFamily={"lobster, sans-serif"}>
-          Weather App{" "}
+          Weather App 🌤️
         </Heading>
         <Navbar />
       </Flex>

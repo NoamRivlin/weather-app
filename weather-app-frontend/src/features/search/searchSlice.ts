@@ -23,9 +23,9 @@ const initialState: SearchState = {
   error: null,
   cities: null,
   ignoreGeoLocation: false,
-  currentCity: { value: "215854", label: "Tel Aviv" },
+  // currentCity: { value: "215854", label: "Tel Aviv" },
+  currentCity: null,
   geoLoading: false,
-  // favoriteCities: null,
   // for showcasing purposes
   favoriteCities: [
     {
@@ -83,11 +83,6 @@ export const getCityByGeoLocation = createAsyncThunk<
     );
 
     return response.data;
-    // for showcasing purposes
-    // return {
-    //   label: "Qiryat Ono",
-    //   value: "215847",
-    // };
   } catch (error: any) {
     if (error instanceof AxiosError) {
       return thunkAPI.rejectWithValue(error.response?.data);

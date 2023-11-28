@@ -61,7 +61,7 @@ const Search: React.FC = () => {
       toast({
         title: "Please enter a valid city name in english letters only",
         status: "error",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
         position: "top",
       });
@@ -98,7 +98,7 @@ const Search: React.FC = () => {
     }
     dispatch(setGeoLoading(true));
     toast({
-      title: "Please allow geolocation to get your current city. ",
+      title: "Fetching Your Location And Forecast...",
       status: "info",
       duration: 5000,
       isClosable: true,
@@ -159,7 +159,7 @@ const Search: React.FC = () => {
         <FormControl>
           <Select
             size={isSmallerThan600px ? "sm" : "md"}
-            name="colors"
+            name="cities"
             options={cities || []}
             isLoading={searchLoading}
             closeMenuOnSelect={true}
