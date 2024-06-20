@@ -90,16 +90,8 @@ npm run preview
   - **Dev Dependencies:**
     - TypeScript
     - Vite
-    - ESLint
 
-## Previewing the Frontend
-
-To preview the frontend locally, run:
-
-```bash
-cd frontend
-npm run dev
-```
+ 
 
 Visit [http://localhost:${process.env.PORT || 3000}](http://localhost:${process.env.PORT || 3000}) in your browser.
 
