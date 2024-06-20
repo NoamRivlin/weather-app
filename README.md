@@ -47,7 +47,7 @@ npm start
 #### Installation
 
 ```bash
-cd frontend
+cd weather-app-frontend
 npm install
 ```
 
