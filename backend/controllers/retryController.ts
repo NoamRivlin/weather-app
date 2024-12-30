@@ -57,13 +57,13 @@ const defaultRetryConfig: RetryConfig = {
 
 const apiKeyManager = new ApiKeyManager([
   process.env.API_KEY7,
-  // process.env.API_KEY8,
-  // process.env.API_KEY1,
-  // process.env.API_KEY2,
-  // process.env.API_KEY3,
-  // process.env.API_KEY4,
-  // process.env.API_KEY5,
-  // process.env.API_KEY6,
+  process.env.API_KEY8,
+  process.env.API_KEY1,
+  process.env.API_KEY2,
+  process.env.API_KEY3,
+  process.env.API_KEY4,
+  process.env.API_KEY5,
+  process.env.API_KEY6,
   
 ].filter((key): key is string => !!key));
 
