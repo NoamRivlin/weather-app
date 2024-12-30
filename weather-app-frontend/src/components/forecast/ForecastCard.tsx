@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Text,
-  Flex,
-  Container,
-  VStack,
-  HStack,
-  useColorMode,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Container, VStack, HStack } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { FiveDaysForecast } from "../../features/weather/weatherSlice";
@@ -61,42 +53,74 @@ const ForecastCard: React.FC<FiveDaysForecast> = ({ ...props }) => {
   }, [dayPhrase]);
 
   return (
-    <Container>
-      <Flex direction="column" width={"260px"} height={"350px"}>
+    <Container p={0} maxW="full">
+      <Flex direction="column" width="full" height="full">
         <Box
           borderRadius={"10px"}
           backgroundImage={
             bgGif ??
             "url(https://mdbgo.io/ascensus/mdb-advanced/img/clouds.gif)"
           }
-          height={"450px"}
+          height={"380px"}
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
           backgroundSize="cover"
+          position="relative"
         >
-          <Box p={4} border={0}>
-            <VStack spacing="3">
-              <Text fontSize="2xl" color="white">
-                {date}
-              </Text>
-              <Text fontSize={"2xl"} {...commonTextStyle}>
+          <VStack 
+            spacing={6} 
+            height="full" 
+            p={4}
+            justify="space-between"
+            align="center"
+          >
+            {/* Date Section - Top */}
+            <Text 
+              fontSize="2xl" 
+              color="white" 
+              textAlign="center"
+              fontWeight="bold"
+            >
+              {date}
+            </Text>
+
+            {/* Weather Description - Middle */}
+            <Box>
+              <Text 
+                fontSize="xl" 
+                {...commonTextStyle}
+                textAlign="center"
+                px={4}
+                minH="60px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
                 {dayPhrase}
               </Text>
-              <Text fontSize="5xl" color="white">
+            </Box>
+
+            {/* Temperature Section - Bottom */}
+            <VStack spacing={4} mb={4}>
+              <Text 
+                fontSize="5xl" 
+                color="white"
+                fontWeight="bold"
+              >
                 {`${tempMetric ? maxTempMetric : maxTempImperial}°${
                   tempMetric ? "C" : "F"
                 }`}
               </Text>
-              <HStack>
-                <Text fontSize={"xl"} {...commonTextStyle}>
-                  Night:{" "}
-                  {`${tempMetric ? minTempMetric : minTempImperial}°${
-                    tempMetric ? "C" : "F"
-                  }`}
-                </Text>
-              </HStack>
+              <Text 
+                fontSize="lg" 
+                {...commonTextStyle}
+              >
+                Night: {`${tempMetric ? minTempMetric : minTempImperial}°${
+                  tempMetric ? "C" : "F"
+                }`}
+              </Text>
             </VStack>
-          </Box>
+          </VStack>
         </Box>
       </Flex>
     </Container>

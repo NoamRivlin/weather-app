@@ -1,75 +1,57 @@
 import axios from "axios";
 import { Request, Response } from "express";
 import dotenv from "dotenv";
+import { fetchDataWithRetry } from "./retryController";
 dotenv.config();
 
-const API_KEYS = [
-  process.env.API_KEY1 as string,
-  process.env.API_KEY2 as string,
-  process.env.API_KEY3 as string,
-  process.env.API_KEY4 as string,
-  process.env.API_KEY5 as string,
-  process.env.API_KEY6 as string,
-];
+interface City {
+  LocalizedName: string;
+  Key: string;
+}
 
-let currentApiKeyIndex = 0;
+interface GeoPositionCity {
+  LocalizedName: string;
+  Key: string;
+}
+
 export const getCity = async (req: Request, res: Response) => {
   try {
     const { cityName } = req.params;
-
-    const response = await axios.get(
-      `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${API_KEYS[currentApiKeyIndex]}&q=${cityName}`
-    );
-
-    const cities = response.data.map((city: any) => ({
+    const url = `https://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${process.env.API_KEY1}&q=${cityName}`;
+    
+    const { data } = await fetchDataWithRetry<City[]>(url);
+    
+    const cities = data.map((city) => ({
       label: city.LocalizedName,
       value: city.Key,
     }));
+    
     res.status(200).json(cities);
-  } catch (error) {
-    handleApiError(error, req, res, getCity);
+  } catch (error: any) {
+    console.error("Error searching cities:", error.message);
+    res.status(error.response?.status || 500).json({
+      error: error.message || "Failed to search cities"
+    });
   }
 };
 
 export const getCityByGeoLocation = async (req: Request, res: Response) => {
   try {
     const { lat, lon } = req.params;
-    const response = await axios.get(
-      `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${API_KEYS[currentApiKeyIndex]}&q=${lat},${lon}`
-    );
-    const city = response.data;
+    const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${process.env.API_KEY1}&q=${lat},${lon}`;
+    
+    const { data } = await fetchDataWithRetry<GeoPositionCity>(url);
+    
     const leanCity = {
-      label: city.LocalizedName,
-      value: city.Key,
+      label: data.LocalizedName,
+      value: data.Key,
     };
+    
     res.status(200).json(leanCity);
-  } catch (error) {
-    handleApiError(error, req, res, getCityByGeoLocation);
+  } catch (error: any) {
+    console.error("Error fetching city by geolocation:", error.message);
+    res.status(error.response?.status || 500).json({
+      error: error.message || "Failed to fetch city by geolocation"
+    });
   }
 };
-
-function handleApiError(
-  error: any,
-  req: Request,
-  res: Response,
-  retryFunction: (req: Request, res: Response) => Promise<void>
-) {
-  console.log("error", error);
-
-  if (
-    error.response?.status > 205 &&
-    currentApiKeyIndex < API_KEYS.length - 1
-  ) {
-    // Retry with the next API key
-    currentApiKeyIndex++;
-    console.log(`Retrying with API key ${currentApiKeyIndex}`);
-    return retryFunction(req, res);
-  }
-
-  res
-    .status(404)
-    .json(
-      error.response?.statusText ||
-        error.response?.data.Code || { message: error }
-    );
-}
