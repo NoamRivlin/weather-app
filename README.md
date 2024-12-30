@@ -8,12 +8,19 @@ This is a web-based weather application that provides current weather conditions
 
 
 ###### Functionality
-https://github.com/NoamRivlin/noam-rivlin-19-11-23/assets/88899637/deab78c2-b7bc-4c96-9429-4bcf19384121
-https://www.loom.com/share/ab44c1c3ee3a4718a5856148da18c9e8?sid=b7c7acac-531b-4abd-934e-d984da111032
+
+
+https://github.com/user-attachments/assets/d742cf64-f575-43b4-ab5d-3ac80935f8fd
+
+
 
 
 ###### Responsiveness
-https://github.com/NoamRivlin/noam-rivlin-19-11-23/assets/88899637/0c40e6d0-0d52-4d58-8e1c-6c05ffbe6c57
+
+
+https://github.com/user-attachments/assets/92670d8c-9c9e-41fc-b0bf-97dd79905de1
+
+
 
 
 
