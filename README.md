@@ -99,9 +99,3 @@ npm run preview
   - **Dev Dependencies:**
     - TypeScript
     - Vite
-
- 
-
-Visit [http://localhost:${process.env.PORT || 3000}](http://localhost:${process.env.PORT || 3000}) in your browser.
-
-Feel free to fork, modify, and adapt the code for your needs! If you encounter any issues or have questions, please refer to the project's documentation or open an issue on the repository.
